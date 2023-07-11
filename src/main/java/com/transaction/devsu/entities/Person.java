@@ -17,8 +17,8 @@ import lombok.NoArgsConstructor;
 public class Person {
     @Id
     @SequenceGenerator(
-            name= "cliente_sequence",
-            sequenceName = "cliente_sequencce",
+            name= "client_sequence",
+            sequenceName = "client_sequencce",
             allocationSize=1
     )
     @Column(name = "PER_ID", unique = true, nullable = false)

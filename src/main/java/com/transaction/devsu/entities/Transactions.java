@@ -1,22 +1,39 @@
 package com.transaction.devsu.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "DEV_TRANSACTIONS")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder(toBuilder = true)
 public class Transactions {
     @Id
     @SequenceGenerator(
-            name= "movimiento_sequence",
-            sequenceName = "movimiento_sequencce",
+            name= "transaction_sequence",
+            sequenceName = "transaction_sequencce",
             allocationSize=1
     )
+    @Column(name = "TRA_ID", nullable = false, unique = true)
     private Long id;
-    private LocalDate fecha;
-    private String tipoMovimiento;
-    private Double valor;
-    private Double saldo;
+    @Column(name = "TRA_DATE")
+    private LocalDate date;
+    @Column(name = "TRA_TRANSACTION_TYPE")
+    private String transactionType;
+    @Column(name = "TRA_AMMOUNT")
+    private BigDecimal ammount;
+    @Column(name = "TRA_BALANCE")
+    private Double balance;
+
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Account.class)
+    @JoinColumn(name = "TRA_ACC_ID", referencedColumnName = "ACC_ID")
+    private Account account;
 }

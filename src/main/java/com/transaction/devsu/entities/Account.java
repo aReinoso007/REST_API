@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "DEV_ACCOUNTS")
 @Data
@@ -15,8 +17,8 @@ import lombok.NoArgsConstructor;
 public class Account {
     @Id
     @SequenceGenerator(
-            name= "cuenta_sequence",
-            sequenceName = "cuenta_sequencce",
+            name= "account_sequence",
+            sequenceName = "account_sequencce",
             allocationSize=1
     )
     @Column(name = "ACC_ID", nullable = false)
@@ -33,6 +35,9 @@ public class Account {
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Client.class)
     @JoinColumn(name = "ACT_CLI_ID", referencedColumnName = "PER_ID")
     private Client client;
+
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<Transactions> transactions;
 
 
 }
