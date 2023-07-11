@@ -7,7 +7,7 @@ import jakarta.persistence.SequenceGenerator;
 import java.time.LocalDate;
 
 @Entity
-public class Movimiento {
+public class Transactions {
     @Id
     @SequenceGenerator(
             name= "movimiento_sequence",

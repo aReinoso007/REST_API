@@ -29,7 +29,7 @@ public class Account {
     private Double initialBalance;
     @Column(name = "ACC_STATUS", nullable = false)
     private Boolean status;
-    
+
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Client.class)
     @JoinColumn(name = "ACT_CLI_ID", referencedColumnName = "PER_ID")
     private Client client;

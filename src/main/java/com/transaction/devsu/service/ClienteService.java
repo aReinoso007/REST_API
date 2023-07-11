@@ -20,7 +20,7 @@ public class ClienteService {
 
     public void addNewCliente(Client client){
 
-        Optional<Client> clienteOptional = clienteRepository.findClienteByIdentificacion(client.getIdentification());
+        Optional<Client> clienteOptional = clienteRepository.findClientByIdentification(client.getIdentification());
         if(clienteOptional.isPresent()){
             throw new IllegalStateException("Client with the given identificacion has already been registered");
         }
