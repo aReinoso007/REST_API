@@ -23,7 +23,7 @@ public class Person {
     )
     @Column(name = "PER_ID", unique = true, nullable = false)
     private Long id;
-    
+
     @Column(name = "PER_NAME",nullable = false)
     @NotNull(message = "Name field is required")
     @Pattern(regexp =  "^[a-zA-Z\\s]+$", message = "Name must only contain letters")
