@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class Transactions {
+public class Transaction {
     @Id
     @SequenceGenerator(
             name= "transaction_sequence",
@@ -25,13 +25,13 @@ public class Transactions {
     @Column(name = "TRA_ID", nullable = false, unique = true)
     private Long id;
     @Column(name = "TRA_DATE")
-    private LocalDate date;
+    private LocalDate transactionDate;
     @Column(name = "TRA_TRANSACTION_TYPE")
     private String transactionType;
     @Column(name = "TRA_AMMOUNT")
     private BigDecimal ammount;
     @Column(name = "TRA_BALANCE")
-    private Double balance;
+    private BigDecimal balance;
 
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Account.class)
     @JoinColumn(name = "TRA_ACC_ID", referencedColumnName = "ACC_ID")

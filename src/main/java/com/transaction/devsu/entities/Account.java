@@ -38,7 +38,7 @@ public class Account {
     private Client client;
 
     @OneToMany(mappedBy = "account", fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<Transactions> transactions;
+    private List<Transaction> transactions;
 
 
 }
