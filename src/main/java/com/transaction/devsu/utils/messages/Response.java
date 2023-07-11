@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 public class Response {
 
     public static final String CLIENT_EXISTS = "CLIENT ALREADY REGISTERED WITH PROVIDED CEDULA";
-    public static final String CLIENT_NOT_FOUND ="CLIENT NOT REGISTERED";
+    public static final String CLIENT_NOT_FOUND ="CLIENT NOT FOUND IN RECORDS";
 
     /*200*/
     public static final HttpStatus HTTP_STATUS_OK = HttpStatus.OK;
@@ -19,7 +19,7 @@ public class Response {
     public static final HttpStatus HTTP_STATUS_INTERNAL_SERVER_ERROR = HttpStatus.INTERNAL_SERVER_ERROR;
 
 
-    public static final BigDecimal
+    public static final BigDecimal MAX_DEBIT = new BigDecimal("1000.00");
 
 
 }
