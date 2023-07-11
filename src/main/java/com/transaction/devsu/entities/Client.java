@@ -1,7 +1,5 @@
 package com.transaction.devsu.entities;
 
-import com.transaction.devsu.entities.Cuenta;
-import com.transaction.devsu.entities.Person;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -24,5 +22,5 @@ public class Client extends Person {
     private Boolean status;
 
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<Cuenta> accounts;
+    private List<Account> accounts;
 }
