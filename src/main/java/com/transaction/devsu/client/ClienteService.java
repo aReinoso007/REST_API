@@ -1,4 +1,4 @@
-package com.transaction.devsu.cliente;
+package com.transaction.devsu.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,22 +17,24 @@ public class ClienteService {
         this.clienteRepository = clienteRepository;
     }
 
-    public void addNewCliente(Cliente cliente){
+    public void addNewCliente(Client client){
 
-        Optional<Cliente> clienteOptional = clienteRepository.findClienteByIdentificacion(cliente.getIdentificacion());
+        Optional<Client> clienteOptional = clienteRepository.findClienteByIdentificacion(client.getIdentificacion());
         if(clienteOptional.isPresent()){
             throw new IllegalStateException("Client with the given identificacion has already been registered");
         }
-        clienteRepository.save(cliente);
+        clienteRepository.save(client);
     }
 
-    public List<ClienteDTO> getClientes(){
-        List<ClienteDTO> clienteDTO = new ArrayList<>();
-        List<Cliente> clientes = clienteRepository.findAll();
-        for(Cliente cliente : clientes){
-            clienteDTO.add(new ClienteDTO(cliente));
+    public List<ClientDTO> getClientes(){
+        List<ClientDTO> clientDTO = new ArrayList<>();
+        List<Client> clients = clienteRepository.findAll();
+        if(!clients.isEmpty()){
+            for(Client client : clients){
+                clientDTO.add(new ClientDTO(client));
+            }
         }
-        return clienteDTO;
+        return clientDTO;
     }
 
 }

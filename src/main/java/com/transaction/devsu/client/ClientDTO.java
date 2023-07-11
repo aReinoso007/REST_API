@@ -1,8 +1,8 @@
-package com.transaction.devsu.cliente;
+package com.transaction.devsu.client;
 
 import java.io.Serializable;
 
-public class ClienteDTO implements Serializable {
+public class ClientDTO implements Serializable {
     private static final long serialVersionUID = 2513506782694494679L;
     private String nombre;
     private String genero;
@@ -13,15 +13,15 @@ public class ClienteDTO implements Serializable {
     private Boolean estado;
 
 
-    public ClienteDTO(Cliente cliente){
+    public ClientDTO(Client client){
         super();
-        this.nombre = cliente.getNombre();
-        this.genero = cliente.getGenero();
-        this.edad = cliente.getEdad();
-        this.identificacion = cliente.getIdentificacion();
-        this.direccion = cliente.getDireccion();
-        this.telefono = cliente.getTelefono();
-        this.estado = cliente.getEstado();
+        this.nombre = client.getNombre();
+        this.genero = client.getGenero();
+        this.edad = client.getEdad();
+        this.identificacion = client.getIdentificacion();
+        this.direccion = client.getDireccion();
+        this.telefono = client.getTelefono();
+        this.estado = client.getEstado();
 
     }
 
