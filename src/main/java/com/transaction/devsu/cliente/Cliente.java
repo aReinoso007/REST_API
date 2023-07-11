@@ -17,4 +17,12 @@ public class Cliente extends Persona {
     private Long clientId;
     private String contrasena;
     private Boolean estado;
+
+    public Cliente() {
+    }
+
+    public Cliente(String contrasena, Boolean estado) {
+        this.contrasena = contrasena;
+        this.estado = estado;
+    }
 }
