@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -28,7 +29,7 @@ public class Account {
     @Column(name = "ACC_ACCOUNT_TYPE", nullable = false)
     private String accountType;
     @Column(name = "ACC_INITIAL_BALANCE", nullable = false)
-    private Double initialBalance;
+    private BigDecimal initialBalance;
     @Column(name = "ACC_STATUS", nullable = false)
     private Boolean status;
 
