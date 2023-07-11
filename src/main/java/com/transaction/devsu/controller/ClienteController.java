@@ -1,5 +1,7 @@
-package com.transaction.devsu.client;
+package com.transaction.devsu.controller;
 
+import com.transaction.devsu.entities.Client;
+import com.transaction.devsu.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +21,7 @@ public class ClienteController {
     }
 
     @GetMapping("")
-    public List<ClientDTO> getClientes(){
+    public List<Client> getClientes(){
         return clienteService.getClientes();
     }
 

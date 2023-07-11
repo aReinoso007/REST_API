@@ -1,4 +1,4 @@
-package com.transaction.devsu.cuenta;
+package com.transaction.devsu.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

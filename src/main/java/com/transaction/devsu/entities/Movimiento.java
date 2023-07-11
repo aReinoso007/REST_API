@@ -1,4 +1,4 @@
-package com.transaction.devsu.movimientos;
+package com.transaction.devsu.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
