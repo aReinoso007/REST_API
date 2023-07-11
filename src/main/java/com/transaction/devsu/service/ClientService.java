@@ -52,7 +52,7 @@ public class ClientService {
         }
     }
 
-    public synchronized ClientDTO addNewCliente(ClientDTO clientDTO) throws CustomException {
+    public ClientDTO addNewCliente(ClientDTO clientDTO) throws CustomException {
 
         try{
             Optional<Client> clienteOptional = clienteRepository.findClientByIdentification(clientDTO.getCedula());
@@ -60,12 +60,10 @@ public class ClientService {
                 throw new CustomException(Response.CLIENT_EXISTS);
             }
             return clientMapper.toClientDTO(clienteRepository.save(clientMapper.toClient(clientDTO)));
-        }catch (ConstraintViolationException cve){
-            log.error(cve.getMessage());
-            throw new CustomException(cve.getMessage().toString(), cve.getCause());
+        } catch (ConstraintViolationException cve){
+            throw new CustomException(cve.getConstraintViolations().toString());
         }catch (Exception e){
-            log.error(e.getMessage());
-            throw  new CustomException(e.getMessage().toString(), e.getCause());
+            throw  new CustomException(e.getMessage());
         }
     }
 

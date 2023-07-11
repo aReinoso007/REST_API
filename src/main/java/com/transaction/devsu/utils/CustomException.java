@@ -1,6 +1,6 @@
 package com.transaction.devsu.utils;
 
-public class CustomException extends Exception {
+public class CustomException extends RuntimeException {
     public CustomException(String message, Throwable cause){
         super(message, cause);
     }
