@@ -5,6 +5,7 @@ import com.transaction.devsu.dto.mappers.ClientMapper;
 import com.transaction.devsu.entities.Client;
 import com.transaction.devsu.repository.ClienteRepository;
 import com.transaction.devsu.utils.BeanNullPropChecker;
+import com.transaction.devsu.utils.CustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,13 +50,18 @@ public class ClientService {
         }
     }
 
-    public void addNewCliente(Client client){
+    public synchronized ClientDTO addNewCliente(ClientDTO clientDTO) throws CustomException {
 
-        Optional<Client> clienteOptional = clienteRepository.findClientByIdentification(client.getIdentification());
-        if(clienteOptional.isPresent()){
-            throw new IllegalStateException("Client with the given identificacion has already been registered");
+        try{
+            Optional<Client> clienteOptional = clienteRepository.findClientByIdentification(clientDTO.getCedula());
+            if(clienteOptional.isPresent()){
+                throw new CustomException("Client with the given identificacion has already been registered");
+            }
+            return clientMapper.toClientDTO(clienteRepository.save(clientMapper.toClient(clientDTO)));
+        }catch (Exception e){
+            log.error("Error saving client");
+            throw  new CustomException(e.getMessage().toString(), e.getCause());
         }
-        clienteRepository.save(client);
     }
 
 

@@ -1,11 +1,10 @@
 package com.transaction.devsu.controller;
 
-import com.transaction.devsu.entities.Client;
+import com.transaction.devsu.dto.ClientDTO;
 import com.transaction.devsu.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,8 +20,13 @@ public class ClienteController {
     }
 
     @GetMapping("")
-    public List<Client> getClientes(){
-        return clientService.getClientes();
+    public List<ClientDTO> getClientes(){
+        return clientService.getAllClients();
+    }
+
+    @PostMapping()
+    public ResponseEntity<?> save(@RequestBody() ClientDTO clientDTO){
+        return null;
     }
 
 }
