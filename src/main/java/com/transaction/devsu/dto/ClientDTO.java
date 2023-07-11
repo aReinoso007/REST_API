@@ -1,10 +1,7 @@
 package com.transaction.devsu.dto;
 
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,6 +24,8 @@ public class ClientDTO {
     private String direccion;
     @Pattern(regexp = "[0-9]+", message = "Phone number must only contain 10 digits")
     private String numeroTelefono;
+    @NotNull(message = "Contrasena is required")
     private String contrasena;
+    @NotNull(message = "Estado is required")
     private Boolean estado;
 }
