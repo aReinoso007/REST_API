@@ -1,5 +1,6 @@
 package com.transaction.devsu.entities;
 
+import com.transaction.devsu.entities.enums.TransactionTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,7 +28,8 @@ public class Transaction {
     @Column(name = "TRA_DATE")
     private LocalDate transactionDate;
     @Column(name = "TRA_TRANSACTION_TYPE")
-    private String transactionType;
+    @Enumerated(EnumType.STRING)
+    private TransactionTypeEnum transactionType;
     @Column(name = "TRA_AMMOUNT")
     private BigDecimal ammount;
     @Column(name = "TRA_BALANCE")

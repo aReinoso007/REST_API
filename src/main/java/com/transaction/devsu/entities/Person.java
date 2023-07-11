@@ -1,5 +1,6 @@
 package com.transaction.devsu.entities;
 
+import com.transaction.devsu.entities.enums.GenderEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -31,7 +32,8 @@ public class Person {
 
     @Column(name = "PER_GENDER")
     @NotNull(message = "Gender is required")
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private GenderEnum gender;
 
     @Column(name = "PER_AGE")
     @NotNull(message = "Age is required")

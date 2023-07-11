@@ -1,5 +1,6 @@
 package com.transaction.devsu.entities;
 
+import com.transaction.devsu.entities.enums.AccountTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,7 +28,8 @@ public class Account {
     @Column(name = "ACC_ACCOUNT_NUMBER", nullable = false)
     private String accountNumber;
     @Column(name = "ACC_ACCOUNT_TYPE", nullable = false)
-    private String accountType;
+    @Enumerated(EnumType.STRING)
+    private AccountTypeEnum accountType;
     @Column(name = "ACC_INITIAL_BALANCE", nullable = false)
     private BigDecimal initialBalance;
     @Column(name = "ACC_STATUS", nullable = false)

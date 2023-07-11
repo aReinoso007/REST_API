@@ -1,6 +1,6 @@
 package com.transaction.devsu.entities.enums;
 
-public enum AccountType {
+public enum AccountTypeEnum {
     CORRIENTE, AHORROS;
 
 }
