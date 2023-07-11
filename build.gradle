@@ -28,6 +28,8 @@ dependencies {
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
 
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+    implementation 'commons-beanutils:commons-beanutils:1.9.4'
 }
 
 tasks.named('test') {

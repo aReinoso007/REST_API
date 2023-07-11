@@ -37,6 +37,16 @@ public class ClientService {
         }
     }
 
+    public ClientDTO findByClientId(Long id){
+        try{
+            Optional<Client> client = clienteRepository.findById(id);
+            return clientMapper.toClientDTO(client.orElseThrow(()-> new IllegalStateException("CLIENT NOT FOUND")));
+        }catch (Exception e){
+            log.error("Error at ClientService.findByClientId");
+            throw new IllegalStateException(e.getMessage(), e);
+        }
+    }
+
     public void addNewCliente(Client client){
 
         Optional<Client> clienteOptional = clienteRepository.findClientByIdentification(client.getIdentification());
@@ -44,6 +54,19 @@ public class ClientService {
             throw new IllegalStateException("Client with the given identificacion has already been registered");
         }
         clienteRepository.save(client);
+    }
+
+
+    public ClientDTO updateClientData(ClientDTO clientDTO, String identificacion){
+        try {
+            Client client = clienteRepository.findClientByIdentification(identificacion)
+                    .orElseThrow(()-> new IllegalStateException("Client not found"));
+            Client clientDataToUpdate = clientMapper.toClient(clientDTO);
+            return null;
+        }catch (Exception e){
+
+        }
+        return null;
     }
 
 }
