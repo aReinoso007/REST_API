@@ -17,16 +17,16 @@ import lombok.NoArgsConstructor;
 public class ClientDTO {
 
     @Size(min = 10, max = 10, message = "Cedula must contain 10 digits only")
-    private String identification;
+    private String cedula;
     @Pattern(regexp = "^[a-zA-Z\\s]+$", message = "Name must only contain letters")
-    private String name;
-    private String gender;
+    private String nombre;
+    private String genero;
     @Min(value = 18, message = "User must be 18 or older to open a bank account")
     @Max(value = 100, message = "User over the age of 100 must be accompanied by their grandparents to open a bank account")
-    private Integer age;
-    private String address;
+    private Integer edad;
+    private String direccion;
     @Pattern(regexp = "[0-9]+", message = "Phone number must only contain 10 digits")
-    private String phoneNumber;
-    private String password;
-    private Boolean status;
+    private String numeroTelefono;
+    private String contrasena;
+    private Boolean estado;
 }

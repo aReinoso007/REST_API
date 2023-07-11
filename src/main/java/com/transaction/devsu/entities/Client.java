@@ -19,10 +19,10 @@ public class Client extends Person {
 
     @Column(name="CLI_PASSWORD", nullable = false)
     @NotNull(message = "The password field is required")
-    private String contrasena;
+    private String password;
     @Column(name = "CLI_STATUS")
-    private Boolean estado;
+    private Boolean status;
 
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<Cuenta> cuentas;
+    private List<Cuenta> accounts;
 }
