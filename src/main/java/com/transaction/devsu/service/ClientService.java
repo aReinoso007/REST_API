@@ -1,5 +1,6 @@
 package com.transaction.devsu.service;
 
+import com.transaction.devsu.dto.mappers.ClientMapper;
 import com.transaction.devsu.entities.Client;
 import com.transaction.devsu.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +10,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ClienteService {
+public class ClientService {
 
     private final ClienteRepository clienteRepository;
+    private final ClientMapper clientMapper;
 
     @Autowired
-    public ClienteService(ClienteRepository clienteRepository){
+    public ClientService(ClienteRepository clienteRepository, ClientMapper clientMapper){
         this.clienteRepository = clienteRepository;
+        this.clientMapper = clientMapper;
     }
 
     public void addNewCliente(Client client){

@@ -1,7 +1,7 @@
 package com.transaction.devsu.controller;
 
 import com.transaction.devsu.entities.Client;
-import com.transaction.devsu.service.ClienteService;
+import com.transaction.devsu.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,16 +13,16 @@ import java.util.List;
 @RequestMapping(path = "/clientes")
 public class ClienteController {
 
-    private final ClienteService clienteService;
+    private final ClientService clientService;
 
     @Autowired
-    public ClienteController(ClienteService clienteService){
-        this.clienteService = clienteService;
+    public ClienteController(ClientService clientService){
+        this.clientService = clientService;
     }
 
     @GetMapping("")
     public List<Client> getClientes(){
-        return clienteService.getClientes();
+        return clientService.getClientes();
     }
 
 }
