@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ClienteRepository extends JpaRepository<ClienteDTO, Long> {
-    Optional<ClienteDTO> findClienteDTOByIdentificacion(String identificacion);
+public interface ClienteRepository extends JpaRepository<Cliente, Long> {
+    Optional<Cliente> findClienteByIdentificacion(String identificacion);
 }

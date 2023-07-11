@@ -10,7 +10,6 @@ public class ClienteDTO implements Serializable {
     private String identificacion;
     private String direccion;
     private String telefono;
-    private String contrasena;
     private Boolean estado;
 
 
@@ -22,7 +21,6 @@ public class ClienteDTO implements Serializable {
         this.identificacion = cliente.getIdentificacion();
         this.direccion = cliente.getDireccion();
         this.telefono = cliente.getTelefono();
-        this.contrasena = cliente.getContrasena();
         this.estado = cliente.getEstado();
 
     }
@@ -73,14 +71,6 @@ public class ClienteDTO implements Serializable {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
-    }
-
-    public String getContrasena() {
-        return contrasena;
-    }
-
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
     }
 
     public Boolean getEstado() {

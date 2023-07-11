@@ -12,7 +12,7 @@ public class ClienteController {
 
     @GetMapping("")
     public List<ClienteDTO> getClientes(){
-
+        return null;
     }
 
 }
