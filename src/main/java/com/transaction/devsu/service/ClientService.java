@@ -4,10 +4,12 @@ import com.transaction.devsu.dto.ClientDTO;
 import com.transaction.devsu.dto.mappers.ClientMapper;
 import com.transaction.devsu.entities.Client;
 import com.transaction.devsu.repository.ClienteRepository;
+import com.transaction.devsu.utils.BeanNullPropChecker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.apache.commons.beanutils.BeanUtilsBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,11 +64,24 @@ public class ClientService {
             Client client = clienteRepository.findClientByIdentification(identificacion)
                     .orElseThrow(()-> new IllegalStateException("Client not found"));
             Client clientDataToUpdate = clientMapper.toClient(clientDTO);
-            return null;
+            BeanUtilsBean beanUtilsBean = new BeanNullPropChecker();
+            beanUtilsBean.copyProperties(client, clientDataToUpdate);
+            return clientMapper.toClientDTO(clienteRepository.save(client));
         }catch (Exception e){
-
+            log.error("error at updateClientData of ClientService");
+            throw new IllegalStateException(e.getMessage(), e);
         }
-        return null;
+    }
+
+    public Boolean deleteById(long id){
+        try{
+            if(clienteRepository.findById(id).isEmpty()) throw new IllegalStateException("Client with given ID not found");
+            clienteRepository.deleteById(id);
+            return true;
+        }catch (Exception e){
+            log.error("error deleting by id at ClientService");
+            throw new IllegalStateException(e.getMessage(), e);
+        }
     }
 
 }
