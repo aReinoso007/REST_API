@@ -21,8 +21,25 @@ public class Cliente extends Persona {
     public Cliente() {
     }
 
-    public Cliente(String contrasena, Boolean estado) {
+    public Cliente(String nombre, String genero, Integer edad, String identificacion, String direccion, String telefono, String contrasena, Boolean estado) {
+        super(nombre, genero, edad, identificacion, direccion, telefono);
         this.contrasena = contrasena;
+        this.estado = estado;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
+    public Boolean getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Boolean estado) {
         this.estado = estado;
     }
 }
