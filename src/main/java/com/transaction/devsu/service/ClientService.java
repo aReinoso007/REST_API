@@ -6,6 +6,7 @@ import com.transaction.devsu.entities.Client;
 import com.transaction.devsu.repository.ClienteRepository;
 import com.transaction.devsu.utils.BeanNullPropChecker;
 import com.transaction.devsu.utils.CustomException;
+import com.transaction.devsu.utils.messages.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,7 +44,7 @@ public class ClientService {
     public ClientDTO findByClientId(Long id){
         try{
             Optional<Client> client = clienteRepository.findById(id);
-            return clientMapper.toClientDTO(client.orElseThrow(()-> new IllegalStateException("CLIENT NOT FOUND")));
+            return clientMapper.toClientDTO(client.orElseThrow(()-> new CustomException(Response.CLIENT_NOT_FOUND)));
         }catch (Exception e){
             log.error("Error at ClientService.findByClientId");
             throw new IllegalStateException(e.getMessage(), e);
@@ -55,7 +56,7 @@ public class ClientService {
         try{
             Optional<Client> clienteOptional = clienteRepository.findClientByIdentification(clientDTO.getCedula());
             if(clienteOptional.isPresent()){
-                throw new CustomException("Client with the given identificacion has already been registered");
+                throw new CustomException(Response.CLIENT_EXISTS);
             }
             return clientMapper.toClientDTO(clienteRepository.save(clientMapper.toClient(clientDTO)));
         }catch (Exception e){
@@ -65,23 +66,23 @@ public class ClientService {
     }
 
 
-    public ClientDTO updateClientData(ClientDTO clientDTO, String identificacion){
+    public ClientDTO updateClientData(ClientDTO clientDTO, String identificacion) throws CustomException {
         try {
             Client client = clienteRepository.findClientByIdentification(identificacion)
-                    .orElseThrow(()-> new IllegalStateException("Client not found"));
+                    .orElseThrow(()-> new CustomException(Response.CLIENT_NOT_FOUND));
             Client clientDataToUpdate = clientMapper.toClient(clientDTO);
             BeanUtilsBean beanUtilsBean = new BeanNullPropChecker();
             beanUtilsBean.copyProperties(client, clientDataToUpdate);
             return clientMapper.toClientDTO(clienteRepository.save(client));
         }catch (Exception e){
             log.error("error at updateClientData of ClientService");
-            throw new IllegalStateException(e.getMessage(), e);
+            throw new CustomException(e.getMessage().toString(), e.getCause());
         }
     }
 
     public Boolean deleteById(long id){
         try{
-            if(clienteRepository.findById(id).isEmpty()) throw new IllegalStateException("Client with given ID not found");
+            if(clienteRepository.findById(id).isEmpty()) throw new CustomException(Response.CLIENT_NOT_FOUND);
             clienteRepository.deleteById(id);
             return true;
         }catch (Exception e){
