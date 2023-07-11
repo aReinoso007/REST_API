@@ -23,6 +23,10 @@ public class Transaction {
             sequenceName = "transaction_sequencce",
             allocationSize=1
     )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "transaction_sequencce"
+    )
     @Column(name = "TRA_ID", nullable = false, unique = true)
     private Long id;
     @Column(name = "TRA_DATE")

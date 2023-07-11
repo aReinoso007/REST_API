@@ -7,6 +7,7 @@ import com.transaction.devsu.repository.ClienteRepository;
 import com.transaction.devsu.utils.BeanNullPropChecker;
 import com.transaction.devsu.utils.CustomException;
 import com.transaction.devsu.utils.messages.Response;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -59,8 +60,11 @@ public class ClientService {
                 throw new CustomException(Response.CLIENT_EXISTS);
             }
             return clientMapper.toClientDTO(clienteRepository.save(clientMapper.toClient(clientDTO)));
+        }catch (ConstraintViolationException cve){
+            log.error(cve.getMessage());
+            throw new CustomException(cve.getMessage().toString(), cve.getCause());
         }catch (Exception e){
-            log.error("Error saving client");
+            log.error(e.getMessage());
             throw  new CustomException(e.getMessage().toString(), e.getCause());
         }
     }

@@ -23,6 +23,10 @@ public class Account {
             sequenceName = "account_sequencce",
             allocationSize=1
     )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "account_sequence"
+    )
     @Column(name = "ACC_ID", nullable = false)
     private Long id;
     @Column(name = "ACC_ACCOUNT_NUMBER", nullable = false)

@@ -14,12 +14,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
+@Table(name = "DEV_PERSONS")
 public class Person {
     @Id
     @SequenceGenerator(
             name= "client_sequence",
             sequenceName = "client_sequencce",
             allocationSize=1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "client_sequence"
     )
     @Column(name = "PER_ID", unique = true, nullable = false)
     private Long id;

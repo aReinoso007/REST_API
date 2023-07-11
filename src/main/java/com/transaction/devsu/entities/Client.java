@@ -1,7 +1,6 @@
 package com.transaction.devsu.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
@@ -19,7 +18,7 @@ public class Client extends Person {
 
     @Column(name="CLI_PASSWORD", nullable = false)
     @NotNull(message = "The password field is required")
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\\\S+$).{8,}$",
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",
     message = "Password must contain at least one digit, at least one lowercase letter and one uppercase, at least" +
             " one special character, no whitespace allowed and minimum length of 8 characters")
     private String password;
