@@ -47,9 +47,7 @@ public class ClienteController {
     @PatchMapping(path = "/{cedula}")
     public ResponseEntity<?> updateCliente(@PathVariable("cedula") String cedula, @RequestParam String nombre){
         try{
-            log.info("in controller");
             ClientDTO responseObject = clientService.updateClientName(nombre, cedula);
-            log.info("returning success");
             return ResponseHandler.generateResponse(Response.SUCCESS, Response.HTTP_STATUS_OK, responseObject);
         }catch (Exception e){
             log.info("returning exception "+e.getMessage());
