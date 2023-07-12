@@ -5,7 +5,6 @@ import com.transaction.devsu.service.AccountService;
 import com.transaction.devsu.utils.ResponseHandler;
 import com.transaction.devsu.utils.Util;
 import com.transaction.devsu.utils.messages.Response;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +29,7 @@ public class AccountController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> addNewAccount(@RequestBody AccountDTO accountDTO, @Param("identificacion") String identificacion){
+    public ResponseEntity<?> addNewAccount(@RequestBody AccountDTO accountDTO, @RequestParam String identificacion){
         try{
             return new ResponseEntity<>(accountService.addAccount(accountDTO, identificacion), Response.HTTP_STATUS_CREATED);
         }catch (Exception e){
