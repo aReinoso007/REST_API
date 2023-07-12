@@ -124,9 +124,16 @@ public class TransactionService {
         try{
             BigDecimal newDifference = account.getInitialBalance().subtract(transactionDTO.getValor());
             if(newDifference.compareTo(BigDecimal.ZERO) <0) throw new CustomException(Response.NO_FUNDS_AVAILABLE);
-            /*Transaction  transaction = Transaction.builder()
+            Transaction  transaction = Transaction.builder()
                     .initialBalance(account.getInitialBalance())
-                    ;*/
+                    .balanceAvailable(newDifference)
+                    .ammount(transactionDTO.getValor()) //maybe add after getValor .multiplue(BigDecimal.valueOf(-1)
+                    .transactionDate(Util.getTodaysDate())
+                    .transactionType(transactionDTO.getTipoMovimiento())
+                    .account(account)
+                    .status(true)
+                    .build();
+
             return null;
         }catch (Exception e){
             throw new CustomException(e.getMessage(), e.getCause());

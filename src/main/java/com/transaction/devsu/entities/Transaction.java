@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "DEV_TRANSACTIONS")
@@ -32,7 +32,7 @@ public class Transaction {
     private Long id;
     @Column(name = "TRA_DATE")
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDate transactionDate;
+    private Date transactionDate;
     @Column(name = "TRA_TRANSACTION_TYPE")
     @Enumerated(EnumType.STRING)
     private TransactionTypeEnum transactionType;
