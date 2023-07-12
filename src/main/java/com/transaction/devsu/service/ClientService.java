@@ -70,7 +70,7 @@ public class ClientService {
 
     public ClientDTO updateClientData(ClientDTO clientDTO, String identificacion) throws CustomException {
         try {
-            Client client = clienteRepository.findClientByIdentification(identificacion)
+            Client client = clienteRepository.findByIdentification(identificacion)
                     .orElseThrow(()-> new CustomException(Response.CLIENT_NOT_FOUND));
             Client clientDataToUpdate = clientMapper.toClient(clientDTO);
             BeanUtilsBean beanUtilsBean = new BeanNullPropChecker();
@@ -78,6 +78,24 @@ public class ClientService {
             return clientMapper.toClientDTO(clienteRepository.save(client));
         }catch (Exception e){
             log.error("error at updateClientData of ClientService");
+            throw new CustomException(e.getMessage(), e.getCause());
+        }
+    }
+    @Transactional
+    public ClientDTO updateClientName(String nombre, String identification){
+        try{
+            Optional<Client> clienteOptional = clienteRepository.getClientUsingIdentification(identification);
+            if(!clienteOptional.isPresent()){
+                throw new CustomException(Response.CLIENT_NOT_FOUND);
+            }
+            Client toSave = clienteOptional.get();
+            toSave.setName(nombre);
+            Client clientSaved = clienteRepository.save(toSave);
+
+            return clientMapper.toClientDTO(clientSaved);
+
+        }catch (Exception e){
+            log.error("error updating name "+e.getMessage());
             throw new CustomException(e.getMessage(), e.getCause());
         }
     }

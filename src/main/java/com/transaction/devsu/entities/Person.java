@@ -2,9 +2,7 @@ package com.transaction.devsu.entities;
 
 import com.transaction.devsu.entities.enums.GenderEnum;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "DEV_PERSONS")
 public class Person {
     @Id
     @SequenceGenerator(
@@ -41,6 +38,8 @@ public class Person {
 
     @Column(name = "PER_AGE")
     @NotNull(message = "Age is required")
+    @Min(value = 18, message = "User must be 18 or older to open a bank account")
+    @Max(value = 100, message = "User over the age of 100 must be accompanied by their grandparents to open a bank account")
     private Integer age;
 
     @Column(name = "PER_IDENTIFICATION")

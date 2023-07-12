@@ -2,6 +2,7 @@ package com.transaction.devsu.controller;
 
 import com.transaction.devsu.dto.ClientDTO;
 import com.transaction.devsu.service.ClientService;
+import com.transaction.devsu.utils.CustomException;
 import com.transaction.devsu.utils.ResponseHandler;
 import com.transaction.devsu.utils.messages.Response;
 import jakarta.validation.*;
@@ -48,6 +49,21 @@ public class ClienteController {
         }
     }
 
+    @PatchMapping(path = "/{cedula}")
+    public ResponseEntity<?> updateCliente(@PathVariable("cedula") String cedula, @RequestParam String nombre){
+        try{
+            log.info("in controller");
+            ClientDTO responseObject = clientService.updateClientName(nombre, cedula);
+            log.info("returning success");
+            return ResponseHandler.generateResponse(Response.SUCCESS, Response.HTTP_STATUS_OK, responseObject);
+        }catch (Exception e){
+            log.info("returning exception "+e.getMessage());
+            throw  e;
+            //return ResponseHandler.generateResponse(e.getMessage(), Response.HTTP_STATUS_BAD_REQUEST, null);
+        }
+    }
+
+
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteClientById(@PathVariable("id") String id){
         try{
@@ -55,8 +71,9 @@ public class ClienteController {
                 return new ResponseEntity<>(Response.SUCCESS, HttpStatus.OK);
             }else return ResponseHandler.generateResponse(Response.CLIENT_NOT_FOUND, Response.HTTP_STATUS_NOT_FOUND, null);
         }catch (Exception e){
-            log.error("delete exception "+e.getMessage());
-            return ResponseHandler.generateResponse(e.getMessage(), Response.HTTP_STATUS_BAD_REQUEST, null);
+            log.error("delete exception "+e.getCause().getCause().getMessage());
+            //return ResponseHandler.generateResponse(e.getMessage(), Response.HTTP_STATUS_BAD_REQUEST, null);
+            throw new CustomException(e.getMessage(), e.getCause());
         }
     }
 
