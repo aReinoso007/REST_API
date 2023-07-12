@@ -64,10 +64,11 @@ public class TransactionService {
            Account account = checkIfAccountExists(transactionDTO);
            Map<String, Object> processResult = processTransaction(transactionDTO, account);
            Boolean status = (Boolean) processResult.get(Response.KEY_STATUS_TRANSACTION);
+           log.info("message from check "+ processResult.get(Response.KEY_MESSAGE_TRANSACTION).toString());
            if(status){
                TransactionDTO dtoResult = (TransactionDTO) processResult.get(Response.KEY_DTO);
                return dtoResult;
-           }else throw new CustomException(Response.NO_TRANSACTION_MADE);
+           }else throw new CustomException((String) processResult.get(Response.KEY_MESSAGE_TRANSACTION));
         }catch (Exception e){
             throw new CustomException(e.getMessage(), e.getCause());
         }
@@ -81,16 +82,13 @@ public class TransactionService {
 
     protected Map<String, Object> processTransaction(TransactionDTO transactionDTO, Account account) throws ParseException {
         Map<String, Object> transactionResult = new HashMap<>();
-        StringBuilder processMessage = new StringBuilder();
-        BigDecimal saldoTransaccion = transactionDTO.getSaldoInicial().subtract(transactionDTO.getValor());
         Map<String, Object> resultCheck = checkTransactionWriteErrorMessage(transactionDTO);
         Boolean processStatus;
         try{
-               processMessage.append(checkTransactionWriteErrorMessage(transactionDTO));
                processStatus = (Boolean) resultCheck.get(Response.KEY_STATUS_TRANSACTION);
-               saldoTransaccion = (BigDecimal) resultCheck.get(Response.KEY_DIFFERENCE_TRANSACTION);
                if(!processStatus){
                    transactionResult.put(Response.KEY_STATUS_TRANSACTION, false);
+                   transactionResult.put(Response.KEY_MESSAGE_TRANSACTION, resultCheck.get(Response.KEY_MESSAGE_TRANSACTION).toString());
                }else{
                    if(processStatus && transactionDTO.getTipoMovimiento().equals(TransactionTypeEnum.DEBIT)){
                        transactionResult.put(Response.KEY_DTO, this.processTransactionOfGivenType(transactionDTO, account, TransactionTypeEnum.DEBIT));
@@ -128,13 +126,12 @@ public class TransactionService {
             processMessage.append(Response.DAILY_LIMIT_EXCEEDED);
             transactionStatus = false;
         }
-        log.info("message "+processMessage.toString());
+        log.info("message in check method "+processMessage.toString());
         log.info("status process "+transactionStatus);
-        log.info("difference "+saldoTransaccion);
+
         processMessage.append(transactionStatus ? processMessage.append(Response.TRANSACTION_OK).toString() : processMessage.toString()) ;
         checkResult.put(Response.KEY_MESSAGE_TRANSACTION, processMessage);
         checkResult.put(Response.KEY_STATUS_TRANSACTION, transactionStatus);
-        checkResult.put(Response.KEY_DIFFERENCE_TRANSACTION, saldoTransaccion);
         return checkResult;
     }
 
