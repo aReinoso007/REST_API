@@ -67,7 +67,9 @@ public class ClientService {
         }
     }
 
-
+    /*
+    Not implemented, however it could be implemented by just making a few changes in the controller
+     */
     public ClientDTO updateClientData(ClientDTO clientDTO, String identificacion) throws CustomException {
         try {
             Client client = clienteRepository.findByIdentification(identificacion)
@@ -77,7 +79,7 @@ public class ClientService {
             beanUtilsBean.copyProperties(client, clientDataToUpdate);
             return clientMapper.toClientDTO(clienteRepository.save(client));
         }catch (Exception e){
-            log.error("error at updateClientData of ClientService");
+            log.error("error at updateClientData of ClientService "+e.getMessage());
             throw new CustomException(e.getMessage(), e.getCause());
         }
     }

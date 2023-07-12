@@ -41,7 +41,6 @@ public class ClienteController {
         }catch (Exception e) {
             String message = "";
             if(e.getCause()!=null){
-                log.error("constraints"+ e.getCause().getCause().getMessage());
                 ConstraintViolationException cons = (ConstraintViolationException) e.getCause().getCause();
                 message = cons.getConstraintViolations().stream().iterator().next().getMessageTemplate();
             }else message= e.getMessage();
@@ -58,8 +57,7 @@ public class ClienteController {
             return ResponseHandler.generateResponse(Response.SUCCESS, Response.HTTP_STATUS_OK, responseObject);
         }catch (Exception e){
             log.info("returning exception "+e.getMessage());
-            throw  e;
-            //return ResponseHandler.generateResponse(e.getMessage(), Response.HTTP_STATUS_BAD_REQUEST, null);
+            return ResponseHandler.generateResponse(e.getMessage(), Response.HTTP_STATUS_BAD_REQUEST, null);
         }
     }
 
@@ -72,8 +70,7 @@ public class ClienteController {
             }else return ResponseHandler.generateResponse(Response.CLIENT_NOT_FOUND, Response.HTTP_STATUS_NOT_FOUND, null);
         }catch (Exception e){
             log.error("delete exception "+e.getCause().getCause().getMessage());
-            //return ResponseHandler.generateResponse(e.getMessage(), Response.HTTP_STATUS_BAD_REQUEST, null);
-            throw new CustomException(e.getMessage(), e.getCause());
+            return ResponseHandler.generateResponse(e.getMessage(), Response.HTTP_STATUS_BAD_REQUEST, null);
         }
     }
 
