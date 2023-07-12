@@ -2,7 +2,6 @@ package com.transaction.devsu.controller;
 
 import com.transaction.devsu.dto.ClientDTO;
 import com.transaction.devsu.service.ClientService;
-import com.transaction.devsu.utils.CustomException;
 import com.transaction.devsu.utils.ResponseHandler;
 import com.transaction.devsu.utils.messages.Response;
 import jakarta.validation.*;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping(path = "/clientes")
@@ -34,10 +32,8 @@ public class ClienteController {
         return clientService.getAllClients();
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<?> save(@RequestBody() ClientDTO clientDTO) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
         try{
 
             return new ResponseEntity<>(clientService.addNewCliente(clientDTO), Response.HTTP_STATUS_CREATED);
@@ -52,6 +48,17 @@ public class ClienteController {
         }
     }
 
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<?> deleteClientById(@PathVariable("id") String id){
+        try{
+            if(clientService.deleteById(Long.valueOf(id))){
+                return new ResponseEntity<>(Response.SUCCESS, HttpStatus.OK);
+            }else return ResponseHandler.generateResponse(Response.CLIENT_NOT_FOUND, Response.HTTP_STATUS_NOT_FOUND, null);
+        }catch (Exception e){
+            log.error("delete exception "+e.getMessage());
+            return ResponseHandler.generateResponse(e.getMessage(), Response.HTTP_STATUS_BAD_REQUEST, null);
+        }
+    }
 
 
 

@@ -78,18 +78,18 @@ public class ClientService {
             return clientMapper.toClientDTO(clienteRepository.save(client));
         }catch (Exception e){
             log.error("error at updateClientData of ClientService");
-            throw new CustomException(e.getMessage().toString(), e.getCause());
+            throw new CustomException(e.getMessage(), e.getCause());
         }
     }
 
-    public Boolean deleteById(long id){
+    public Boolean deleteById(long id) {
         try{
-            if(clienteRepository.findById(id).isEmpty()) throw new CustomException(Response.CLIENT_NOT_FOUND);
+            if(clienteRepository.findById(id).isEmpty()) return false;
             clienteRepository.deleteById(id);
             return true;
         }catch (Exception e){
             log.error("error deleting by id at ClientService");
-            throw new IllegalStateException(e.getMessage(), e);
+            throw new CustomException(e.getMessage(), e.getCause());
         }
     }
 
