@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 
 public class Response {
 
+    /* GENERAL RESPONSES*/
     public static final String CLIENT_EXISTS = "CLIENT ALREADY REGISTERED WITH PROVIDED CEDULA";
     public static final String CLIENT_NOT_FOUND ="CLIENT NOT FOUND IN RECORDS";
     public static final String SUCCESS = "TRANSACTION COMPLETED SUCCESSFULLY";
@@ -22,8 +23,11 @@ public class Response {
     /*500*/
     public static final HttpStatus HTTP_STATUS_INTERNAL_SERVER_ERROR = HttpStatus.INTERNAL_SERVER_ERROR;
 
-
-    public static final BigDecimal MAX_DEBIT = new BigDecimal("1000.00");
-
+    /* RELATED TO TRANSACTION */
+    public static final BigDecimal MAX_DAILY_DEBIT = new BigDecimal("1000.00");
+    public static final String NO_FUNDS_AVAILABLE = "SALDO NO DISPONIBLE";
+    public static final String DAILY_LIMIT_EXCEEDED = "CUPO DIARIO EXCEDIDO";
+    public static final String TRANSACTION_TYPE_ADDITION = "ADDITION";
+    public static final String TRANSACTION_TYPE_SUBSTRACTION = "SUBSTRACTION";
 
 }
