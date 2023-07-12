@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Builder(toBuilder = true)
 @Data
@@ -21,7 +22,7 @@ public class TransactionDTO {
     private String numeroCuenta;
     @NotNull(message = "Fecha Movimiento is required")
     @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDate fechaMovimiento;
+    private Date fechaMovimiento;
     private TransactionTypeEnum tipoMovimiento;
     private BigDecimal valor;
     private BigDecimal saldoInicial;

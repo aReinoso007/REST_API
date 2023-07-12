@@ -42,8 +42,19 @@ public class TransactionService {
             throw new CustomException(e.getMessage(), e.getCause());
         }
     }
+
+    public List<TransactionDTO> getTransactionsByAccountNumber(String accountNumber){
+        try{
+            Optional<List<Transaction>> transactionList = transactionRepository.findTransactionsByAccountAccountNumber(accountNumber);
+            return transactionMapper.transactionListToTransactionDtoList(transactionList.orElseGet(ArrayList::new));
+        }catch (Exception e){
+            log.error("Error at getting transactions by account number {}",e);
+            throw new CustomException(e.getMessage(), e.getCause());
+        }
+    }
+
     @Transactional
-    public TransactionDTO makeTransaction(TransactionDTO transactionDTO, String numero){
+    public TransactionDTO makeTransaction(TransactionDTO transactionDTO){
         try{
            Account account = checkIfAccountExists(transactionDTO);
            Map<String, Object> processResult = processtTransaction(transactionDTO, account);
@@ -62,6 +73,7 @@ public class TransactionService {
     protected Map<String, Object> processtTransaction(TransactionDTO transactionDTO, Account account){
         Map<String, Object> transactionResult = new HashMap<>();
         StringBuilder processMessage = new StringBuilder();
+        BigDecimal saldoTransaccion = transactionDTO.getSaldoInicial().subtract(transactionDTO.getValor());
         try{
                processMessage.append(checkTransactionWriteErrorMessage(transactionDTO));
 
@@ -74,6 +86,7 @@ public class TransactionService {
     protected String checkTransactionWriteErrorMessage(TransactionDTO transactionDTO){
         StringBuilder processMessage = new StringBuilder();
         Boolean transactionStatus = true;
+        BigDecimal saldoTransaccion = transactionDTO.getSaldoInicial().subtract(transactionDTO.getValor());
         if(transactionDTO.getValor().compareTo(BigDecimal.ZERO) > 0 && transactionDTO.getTipoMovimiento().equals(TransactionTypeEnum.DEBIT)){
             processMessage.append(Response.INVALID_TRANSACTION_DEBIT);
             transactionStatus = false;
@@ -84,12 +97,12 @@ public class TransactionService {
             transactionStatus = false;
         }
 
-        if(transactionDTO.getSaldoInicial().compareTo(BigDecimal.ZERO) == 0 && transactionDTO.getTipoMovimiento().equals(TransactionTypeEnum.DEBIT)){
+        if(saldoTransaccion.compareTo(BigDecimal.ZERO) <= 0 && transactionDTO.getTipoMovimiento().equals(TransactionTypeEnum.DEBIT)){
             processMessage.append(Response.NO_FUNDS_AVAILABLE);
             transactionStatus = false;
         }
-
-        if(!checkDailyLimit(transactionDTO)) {
+        /*True means it has exceeded, false it hasnt */
+        if(checkDailyLimit(transactionDTO)) {
             processMessage.append(Response.DAILY_LIMIT_EXCEEDED);
             transactionStatus = false;
         }
@@ -99,6 +112,10 @@ public class TransactionService {
 
     protected Boolean checkDailyLimit(TransactionDTO transactionDTO){
         Boolean dailyLimitstatus = false;
+        Optional<List<Transaction>> transactions = transactionRepository.
+                findTransactionsByAccountAccountNumberAndTransactionTypeAndTransactionDate(transactionDTO.getClienteCedula(),
+                        transactionDTO.getTipoMovimiento(),
+                        transactionDTO.getFechaMovimiento());
         return dailyLimitstatus;
     }
 

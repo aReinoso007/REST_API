@@ -3,6 +3,10 @@ package com.transaction.devsu.utils;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @Slf4j
 public class Util {
 
@@ -19,5 +23,10 @@ public class Util {
         }
 
         return message;
+    }
+
+    public static Date getTodaysDate() throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        return formatter.parse(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
     }
 }
