@@ -9,6 +9,7 @@ public class Response {
     public static final String CLIENT_EXISTS = "CLIENT ALREADY REGISTERED WITH PROVIDED CEDULA";
     public static final String CLIENT_NOT_FOUND ="CLIENT NOT FOUND IN RECORDS";
     public static final String SUCCESS = "TRANSACTION COMPLETED SUCCESSFULLY";
+    public static final String RESOURCE_NOT_FOUND="RESOURCE NOT FOUND";
 
     /*200*/
     public static final HttpStatus HTTP_STATUS_OK = HttpStatus.OK;

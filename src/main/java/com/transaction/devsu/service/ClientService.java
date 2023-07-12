@@ -38,7 +38,7 @@ public class ClientService {
             return clientMapper.toClientDTOs(clients.orElseGet(ArrayList::new));
         }catch (Exception e){
             log.error("Exception at ClientService while getting all");
-            throw new IllegalStateException(e.getMessage(), e);
+            throw new CustomException(e.getMessage(), e);
         }
     }
 
@@ -48,7 +48,7 @@ public class ClientService {
             return clientMapper.toClientDTO(client.orElseThrow(()-> new CustomException(Response.CLIENT_NOT_FOUND)));
         }catch (Exception e){
             log.error("Error at ClientService.findByClientId");
-            throw new IllegalStateException(e.getMessage(), e);
+            throw new CustomException(e.getMessage(), e);
         }
     }
 

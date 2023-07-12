@@ -2,7 +2,6 @@ package com.transaction.devsu.controller;
 
 import com.transaction.devsu.dto.ClientDTO;
 import com.transaction.devsu.service.ClientService;
-import com.transaction.devsu.utils.CustomException;
 import com.transaction.devsu.utils.ResponseHandler;
 import com.transaction.devsu.utils.messages.Response;
 import jakarta.validation.*;
