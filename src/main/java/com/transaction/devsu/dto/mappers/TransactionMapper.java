@@ -14,8 +14,10 @@ public interface TransactionMapper {
     @Mapping(source = "transactionDate", target = "fechaMovimiento")
     @Mapping(source = "transactionType", target = "tipoMovimiento")
     @Mapping(source = "ammount", target = "valor")
-    @Mapping(source = "balance", target = "saldoInicial")
+    @Mapping(source = "initialBalance", target = "saldoInicial")
+    @Mapping(source = "balanceAvailable", target = "saldoDisponible")
     @Mapping(source = "account.client.identification", target = "clienteCedula")
+    @Mapping(source = "status", target = "estado")
     TransactionDTO transactionToTransactionDto(Transaction transaction);
     List<TransactionDTO> transactionListToTransactionDtoList(List<Transaction> transactions);
 

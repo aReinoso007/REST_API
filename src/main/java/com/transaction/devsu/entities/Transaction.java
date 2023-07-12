@@ -38,8 +38,12 @@ public class Transaction {
     private TransactionTypeEnum transactionType;
     @Column(name = "TRA_AMMOUNT")
     private BigDecimal ammount;
-    @Column(name = "TRA_BALANCE")
-    private BigDecimal balance;
+    @Column(name = "TRA_INITIAL_BALANCE")
+    private BigDecimal initialBalance;
+    @Column(name = "TRA_BALANCE_AVAILABLE")
+    private BigDecimal balanceAvailable;
+    @Column(name = "TRA_STATUS")
+    private Boolean status;
 
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Account.class)
     @JoinColumn(name = "TRA_ACC_ID", referencedColumnName = "ACC_ID")

@@ -76,6 +76,7 @@ public class TransactionService {
         Map<String, Object> transactionResult = new HashMap<>();
         StringBuilder processMessage = new StringBuilder();
         BigDecimal saldoTransaccion = transactionDTO.getSaldoInicial().subtract(transactionDTO.getValor());
+        Map<String, Object> resultCheck = checkTransactionWriteErrorMessage(transactionDTO);
         try{
                processMessage.append(checkTransactionWriteErrorMessage(transactionDTO));
 
@@ -96,7 +97,7 @@ public class TransactionService {
         }
 
         if(transactionDTO.getValor().compareTo(BigDecimal.ZERO) <=0 && transactionDTO.getTipoMovimiento().equals(TransactionTypeEnum.DEPOSIT)){
-            processMessage.append(Response.INVALID_TRANSACTION_DEBIT);
+            processMessage.append(Response.INVALID_TRANSACTION_DEPOSIT);
             transactionStatus = false;
         }
 
@@ -119,6 +120,20 @@ public class TransactionService {
         return checkResult;
     }
 
+    protected TransactionDTO processDebit(TransactionDTO transactionDTO, Account account){
+        try{
+            BigDecimal newDifference = account.getInitialBalance().subtract(transactionDTO.getValor());
+            if(newDifference.compareTo(BigDecimal.ZERO) <0) throw new CustomException(Response.NO_FUNDS_AVAILABLE);
+            /*Transaction  transaction = Transaction.builder()
+                    .initialBalance(account.getInitialBalance())
+                    ;*/
+            return null;
+        }catch (Exception e){
+            throw new CustomException(e.getMessage(), e.getCause());
+        }
+
+    }
+
     protected Boolean checkDailyLimit(TransactionDTO transactionDTO) throws ParseException {
         Boolean dailyLimitstatus = false;
         Optional<List<Transaction>> transactions = transactionRepository.
@@ -128,7 +143,7 @@ public class TransactionService {
         BigDecimal currentBalance = transactions
                 .orElse(Collections.emptyList())
                 .stream()
-                .map(Transaction::getBalance)
+                .map(Transaction::getAmmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         if(currentBalance.compareTo(Response.MAX_DAILY_DEBIT) > 0 || transactionDTO.getValor().compareTo(Response.MAX_DAILY_DEBIT) >0) dailyLimitstatus = true;
         return dailyLimitstatus;

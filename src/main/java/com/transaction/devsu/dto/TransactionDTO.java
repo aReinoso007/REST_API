@@ -18,15 +18,15 @@ import java.util.Date;
 @NoArgsConstructor
 public class TransactionDTO {
 
-    @NotNull(message = "Account Number is required")
     private String numeroCuenta;
-    @NotNull(message = "Fecha Movimiento is required")
     @JsonFormat(pattern = "dd-MM-yyyy")
     private Date fechaMovimiento;
     private TransactionTypeEnum tipoMovimiento;
     private BigDecimal valor;
     private BigDecimal saldoInicial;
+    private BigDecimal saldoDisponible;
     private String clienteCedula;
+    private Boolean estado;
 
 
 }
