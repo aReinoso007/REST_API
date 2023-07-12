@@ -1,5 +1,6 @@
 package com.transaction.devsu.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.transaction.devsu.entities.enums.TransactionTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,7 @@ public class Transaction {
     @Column(name = "TRA_ID", nullable = false, unique = true)
     private Long id;
     @Column(name = "TRA_DATE")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate transactionDate;
     @Column(name = "TRA_TRANSACTION_TYPE")
     @Enumerated(EnumType.STRING)

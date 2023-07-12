@@ -1,6 +1,7 @@
 package com.transaction.devsu.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.transaction.devsu.entities.enums.TransactionTypeEnum;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,13 +22,9 @@ public class TransactionDTO {
     @NotNull(message = "Fecha Movimiento is required")
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate fechaMovimiento;
-    @NotNull(message = "Tipo Movimiento is required")
-    private String tipoMovimiento;
-    @NotNull(message = "Valor is required")
+    private TransactionTypeEnum tipoMovimiento;
     private BigDecimal valor;
-    @NotNull(message = "Saldo is required")
     private BigDecimal saldoInicial;
-    @NotNull(message = "Cliente cedula is required")
     private String clienteCedula;
 
 

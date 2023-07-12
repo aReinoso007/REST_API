@@ -22,5 +22,5 @@ public interface TransactionMapper {
     @InheritInverseConfiguration
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "account", ignore = true)
-    Transaction toTransaction(TransactionDTO transactionDTO);
+    Transaction transactionDTOToTransaction(TransactionDTO transactionDTO);
 }
