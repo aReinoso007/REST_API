@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,9 +47,9 @@ public class AccountService {
         }
     }
 
-    public AccountDTO addAccount(AccountDTO accountDTO, String identification){
+    public AccountDTO addAccount(AccountDTO accountDTO){
         try{
-            Optional<Client> client = clienteRepository.findByIdentification(identification);
+            Optional<Client> client = clienteRepository.findByIdentification(accountDTO.getClienteCedula());
             if(!client.isPresent()) throw new CustomException(Response.CLIENT_NOT_FOUND);
             Account account = accountMapper.toAccount(accountDTO);
             account.setClient(client.get());
@@ -77,8 +78,19 @@ public class AccountService {
 
     public AccountDTO getByAccountNumber(String accountNumber){
         try{
-            Optional<Account> account = accountRepository.findByAccountNumber(accountNumber);
-            return accountMapper.toAccountDTO(account.orElseThrow(()-> new CustomException(Response.RESOURCE_NOT_FOUND)));
+            Account account = accountRepository.findAccountByAccountNumber(accountNumber);
+            if(account == null) throw new CustomException(Response.RESOURCE_NOT_FOUND);
+            return accountMapper.toAccountDTO(account);
+        }catch (Exception e){
+            throw new CustomException(e.getMessage(), e.getCause());
+        }
+    }
+
+    public AccountDTO getAccountById(Long id){
+        try{
+            Optional<Account> account = accountRepository.findById(id);
+            if(account.isEmpty()) throw new CustomException(Response.RESOURCE_NOT_FOUND);
+            return accountMapper.toAccountDTO(account.get());
         }catch (Exception e){
             throw new CustomException(e.getMessage(), e.getCause());
         }
@@ -86,6 +98,8 @@ public class AccountService {
 
     public Boolean deleteAccountById(Long id){
         try{
+            Optional<Account> account = accountRepository.findById(id);
+            log.info("account "+account.get().getAccountNumber());
             if(accountRepository.findById(id).isEmpty()) return false;
             clienteRepository.deleteById(id);
             return true;

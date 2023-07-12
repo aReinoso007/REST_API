@@ -31,10 +31,29 @@ public class AccountController {
         return accountService.getAllAccount();
     }
 
-    @PostMapping()
-    public ResponseEntity<?> addNewAccount(@RequestBody AccountDTO accountDTO, @RequestParam String identificacion){
+    @GetMapping("/cuenta/{accountNumber}")
+    public ResponseEntity<?> getByAccountNumber(@PathVariable("accountNumber") String accountNumber){
         try{
-            return new ResponseEntity<>(accountService.addAccount(accountDTO, identificacion), Response.HTTP_STATUS_CREATED);
+            return new ResponseEntity<>(accountService.getByAccountNumber(accountNumber), Response.HTTP_STATUS_OK);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return ResponseHandler.generateResponse(e.getMessage(), Response.HTTP_STATUS_BAD_REQUEST, null);
+        }
+    }
+    @GetMapping("/id/{id}")
+    public ResponseEntity<?> getByAccountById(@PathVariable("id") String id){
+        try{
+            return new ResponseEntity<>(accountService.getAccountById(Long.valueOf(id)), Response.HTTP_STATUS_OK);
+        }catch (Exception e){
+            log.error(e.getMessage());
+            return ResponseHandler.generateResponse(e.getMessage(), Response.HTTP_STATUS_BAD_REQUEST, null);
+        }
+    }
+
+    @PostMapping()
+    public ResponseEntity<?> addNewAccount(@RequestBody AccountDTO accountDTO){
+        try{
+            return new ResponseEntity<>(accountService.addAccount(accountDTO), Response.HTTP_STATUS_CREATED);
         }catch (Exception e){
             String message = Util.getConstraintViolationsFromException(e);
             return ResponseHandler.generateResponse(message, Response.HTTP_STATUS_BAD_REQUEST, null);

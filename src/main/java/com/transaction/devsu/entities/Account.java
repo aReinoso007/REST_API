@@ -2,10 +2,7 @@ package com.transaction.devsu.entities;
 
 import com.transaction.devsu.entities.enums.AccountTypeEnum;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,7 +26,7 @@ public class Account {
     )
     @Column(name = "ACC_ID", nullable = false)
     private Long id;
-    @Column(name = "ACC_ACCOUNT_NUMBER", nullable = false)
+    @Column(name = "ACC_ACCOUNT_NUMBER", nullable = false, unique = true)
     private String accountNumber;
     @Column(name = "ACC_ACCOUNT_TYPE", nullable = false)
     @Enumerated(EnumType.STRING)
