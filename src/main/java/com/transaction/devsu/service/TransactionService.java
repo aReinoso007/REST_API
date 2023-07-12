@@ -113,10 +113,6 @@ public class TransactionService {
         Map<String, Object> checkResult = new HashMap<>();
         Boolean transactionStatus = true;
         BigDecimal saldoTransaccion = transactionDTO.getSaldoInicial().subtract(transactionDTO.getValor());
-        if(transactionDTO.getValor().compareTo(BigDecimal.ZERO) > 0 && transactionDTO.getTipoMovimiento().equals(TransactionTypeEnum.DEBIT)){
-            processMessage.append(Response.INVALID_TRANSACTION_DEBIT);
-            transactionStatus = false;
-        }
 
         if(transactionDTO.getValor().compareTo(BigDecimal.ZERO) <=0 && transactionDTO.getTipoMovimiento().equals(TransactionTypeEnum.DEPOSIT)){
             processMessage.append(Response.INVALID_TRANSACTION_DEPOSIT);
@@ -146,23 +142,35 @@ public class TransactionService {
     protected TransactionDTO processTransactionOfGivenType(TransactionDTO transactionDTO, Account account, TransactionTypeEnum transactionTypeEnum) throws ParseException {
         try{
             BigDecimal newDifference = new BigDecimal("0.0");
+            Transaction  transaction = new Transaction();
             if(transactionTypeEnum.equals(TransactionTypeEnum.DEBIT)){
+                log.info("debiting");
                 newDifference = account.getInitialBalance().subtract(transactionDTO.getValor());
+                log.info("new diff "+newDifference);
+                transaction = Transaction.builder()
+                        .initialBalance(account.getInitialBalance())
+                        .balanceAvailable(newDifference)
+                        .ammount(transactionDTO.getValor().multiply(BigDecimal.valueOf(-1)))
+                        .transactionDate(Util.getTodaysDate())
+                        .transactionType(transactionDTO.getTipoMovimiento())
+                        .account(account)
+                        .status(true)
+                        .build();
                 if(newDifference.compareTo(BigDecimal.ZERO) <0) throw new CustomException(Response.NO_FUNDS_AVAILABLE);
             }
             if(transactionTypeEnum.equals(TransactionTypeEnum.DEPOSIT)){
                 newDifference = account.getInitialBalance().add(transactionDTO.getValor());
+                transaction = Transaction.builder()
+                        .initialBalance(account.getInitialBalance())
+                        .balanceAvailable(newDifference)
+                        .ammount(transactionDTO.getValor())
+                        .transactionDate(Util.getTodaysDate())
+                        .transactionType(transactionDTO.getTipoMovimiento())
+                        .account(account)
+                        .status(true)
+                        .build();
             }
 
-            Transaction  transaction = Transaction.builder()
-                    .initialBalance(account.getInitialBalance())
-                    .balanceAvailable(newDifference)
-                    .ammount(transactionDTO.getValor())
-                    .transactionDate(Util.getTodaysDate())
-                    .transactionType(transactionDTO.getTipoMovimiento())
-                    .account(account)
-                    .status(true)
-                    .build();
 
             transactionRepository.save(transaction);
             log.info("Updating balanace...");

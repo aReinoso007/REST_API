@@ -27,7 +27,6 @@ public class Response {
     public static final BigDecimal MAX_DAILY_DEBIT = new BigDecimal("1000.00");
     public static final String NO_FUNDS_AVAILABLE = "SALDO NO DISPONIBLE";
     public static final String DAILY_LIMIT_EXCEEDED = "CUPO DIARIO EXCEDIDO";
-    public static final String INVALID_TRANSACTION_DEBIT = "DEBITO DEBE SER DE VALORES NEGATIVOS";
     public static final String INVALID_TRANSACTION_DEPOSIT ="DEPOSITO DEBE SER DE VALORES POSITIVOS";
     public static final Boolean TRANSACTION_OK = true;
     public static final String NO_TRANSACTION_MADE = "TRANSACTION COULD NOT BE PROCESSED";
