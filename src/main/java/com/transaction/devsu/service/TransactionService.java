@@ -8,6 +8,7 @@ import com.transaction.devsu.entities.enums.TransactionTypeEnum;
 import com.transaction.devsu.repository.AccountRepository;
 import com.transaction.devsu.repository.TransactionRepository;
 import com.transaction.devsu.utils.CustomException;
+import com.transaction.devsu.utils.Util;
 import com.transaction.devsu.utils.messages.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.*;
 
 @Service
@@ -70,7 +72,7 @@ public class TransactionService {
         return account.get();
     }
 
-    protected Map<String, Object> processtTransaction(TransactionDTO transactionDTO, Account account){
+    protected Map<String, Object> processtTransaction(TransactionDTO transactionDTO, Account account) throws ParseException {
         Map<String, Object> transactionResult = new HashMap<>();
         StringBuilder processMessage = new StringBuilder();
         BigDecimal saldoTransaccion = transactionDTO.getSaldoInicial().subtract(transactionDTO.getValor());
@@ -83,8 +85,9 @@ public class TransactionService {
         }
     }
 
-    protected String checkTransactionWriteErrorMessage(TransactionDTO transactionDTO){
+    protected Map<String, Object> checkTransactionWriteErrorMessage(TransactionDTO transactionDTO) throws ParseException {
         StringBuilder processMessage = new StringBuilder();
+        Map<String, Object> checkResult = new HashMap<>();
         Boolean transactionStatus = true;
         BigDecimal saldoTransaccion = transactionDTO.getSaldoInicial().subtract(transactionDTO.getValor());
         if(transactionDTO.getValor().compareTo(BigDecimal.ZERO) > 0 && transactionDTO.getTipoMovimiento().equals(TransactionTypeEnum.DEBIT)){
@@ -106,16 +109,28 @@ public class TransactionService {
             processMessage.append(Response.DAILY_LIMIT_EXCEEDED);
             transactionStatus = false;
         }
-
-        return transactionStatus ? processMessage.append(Response.TRANSACTION_OK).toString() : processMessage.toString();
+        log.info("message "+processMessage.toString());
+        log.info("status process "+transactionStatus);
+        log.info("difference "+saldoTransaccion);
+        processMessage.append(transactionStatus ? processMessage.append(Response.TRANSACTION_OK).toString() : processMessage.toString()) ;
+        checkResult.put(Response.KEY_MESSAGE_TRANSACTION, processMessage);
+        checkResult.put(Response.KEY_STATUS_TRANSACTION, transactionStatus);
+        checkResult.put(Response.KEY_DIFFERENCE_TRANSACTION, saldoTransaccion);
+        return checkResult;
     }
 
-    protected Boolean checkDailyLimit(TransactionDTO transactionDTO){
+    protected Boolean checkDailyLimit(TransactionDTO transactionDTO) throws ParseException {
         Boolean dailyLimitstatus = false;
         Optional<List<Transaction>> transactions = transactionRepository.
                 findTransactionsByAccountAccountNumberAndTransactionTypeAndTransactionDate(transactionDTO.getClienteCedula(),
                         transactionDTO.getTipoMovimiento(),
-                        transactionDTO.getFechaMovimiento());
+                        Util.getTodaysDate());
+        BigDecimal currentBalance = transactions
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(Transaction::getBalance)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        if(currentBalance.compareTo(Response.MAX_DAILY_DEBIT) > 0 || transactionDTO.getValor().compareTo(Response.MAX_DAILY_DEBIT) >0) dailyLimitstatus = true;
         return dailyLimitstatus;
     }
 
