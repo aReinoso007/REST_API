@@ -5,7 +5,6 @@ import com.transaction.devsu.service.ClientService;
 import com.transaction.devsu.utils.ResponseHandler;
 import com.transaction.devsu.utils.Util;
 import com.transaction.devsu.utils.messages.Response;
-import jakarta.validation.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
