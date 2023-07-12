@@ -7,7 +7,6 @@ import com.transaction.devsu.utils.Util;
 import com.transaction.devsu.utils.messages.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -78,6 +77,18 @@ public class AccountController {
             }else return ResponseHandler.generateResponse(Response.RESOURCE_NOT_FOUND, Response.HTTP_STATUS_NOT_FOUND, null);
         }catch (Exception e){
             log.error("delete exception "+e.getCause().getCause().getMessage());
+            return ResponseHandler.generateResponse(e.getMessage(), Response.HTTP_STATUS_BAD_REQUEST, null);
+        }
+    }
+
+    @DeleteMapping(path = "/numeroCuenta/{numero}")
+    public ResponseEntity<?> deleteAccountByAccountNumber(@PathVariable("numero") String numero){
+        try{
+            if(accountService.deleteAcccountByAccountNumber(numero)){
+                return new ResponseEntity<>(Response.SUCCESS, HttpStatus.OK);
+            }else return ResponseHandler.generateResponse(Response.RESOURCE_NOT_FOUND, Response.HTTP_STATUS_NOT_FOUND, null);
+        }catch (Exception e){
+            log.error("Error processing delete request "+e);
             return ResponseHandler.generateResponse(e.getMessage(), Response.HTTP_STATUS_BAD_REQUEST, null);
         }
     }

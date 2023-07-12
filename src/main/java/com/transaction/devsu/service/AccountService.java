@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -106,6 +105,17 @@ public class AccountService {
 
         }catch (Exception e){
             log.error("Unexpected exception at deleteAccountById "+e);
+            throw new CustomException(e.getMessage(), e.getCause());
+        }
+    }
+
+    public Boolean deleteAcccountByAccountNumber(String accountNumber){
+        try{
+            if(accountRepository.findByAccountNumber(accountNumber).isEmpty()) return false;
+            accountRepository.deleteAccountByAccountNumber(accountNumber);
+            return true;
+        }catch (Exception e){
+            log.error("Error at deletingAccountByAccountNumber "+e);
             throw new CustomException(e.getMessage(), e.getCause());
         }
     }
