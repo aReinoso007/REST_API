@@ -133,9 +133,10 @@ public class TransactionService {
                     .account(account)
                     .status(true)
                     .build();
-
-            return null;
+            transactionRepository.save(transaction);
+            return transactionMapper.transactionToTransactionDto(transaction);
         }catch (Exception e){
+            log.error("Error processing debit transaction ", e);
             throw new CustomException(e.getMessage(), e.getCause());
         }
 

@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -118,6 +119,11 @@ public class AccountService {
             log.error("Error at deletingAccountByAccountNumber "+e);
             throw new CustomException(e.getMessage(), e.getCause());
         }
+    }
+
+    public void setCurrentAvailableBalanceToAccount(Account account, BigDecimal availableBalance){
+        account.setInitialBalance(availableBalance);
+        accountRepository.save(account);
     }
 
 }
