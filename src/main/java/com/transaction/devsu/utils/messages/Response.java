@@ -30,10 +30,12 @@ public class Response {
     public static final String INVALID_TRANSACTION_DEBIT = "DEBITO DEBE SER DE VALORES NEGATIVOS";
     public static final String INVALID_TRANSACTION_DEPOSIT ="DEPOSITO DEBE SER DE VALORES POSITIVOS";
     public static final Boolean TRANSACTION_OK = true;
+    public static final String NO_TRANSACTION_MADE = "TRANSACTION COULD NOT BE PROCESSED";
 
     /*TRANSACTION MESSAGES */
     public static final String KEY_MESSAGE_TRANSACTION = "MESSAGE_TRANSACTION";
     public static final String KEY_STATUS_TRANSACTION = "STATUS_TRANSACTION";
     public static final String KEY_DIFFERENCE_TRANSACTION = "DIFFERENCE_TRANSACTION";
+    public static final String KEY_DTO = "DTO";
 
 }

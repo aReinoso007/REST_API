@@ -35,7 +35,7 @@ public class TransactionController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> makeTransaction(@RequestBody TransactionDTO transactionDTO, @PathVariable("numeroCuenta") String numero){
+    public ResponseEntity<?> makeTransaction(@RequestBody TransactionDTO transactionDTO){
         try{
             return new ResponseEntity<>(transactionService.makeTransaction(transactionDTO), Response.HTTP_STATUS_OK);
         }catch (Exception e){

@@ -25,14 +25,17 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final TransactionMapper transactionMapper;
     private final AccountRepository accountRepository;
+    private final AccountService accountService;
 
     @Autowired
     public TransactionService(TransactionRepository transactionRepository,
                               TransactionMapper transactionMapper,
-                              AccountRepository accountRepository){
+                              AccountRepository accountRepository,
+                              AccountService accountService){
         this.transactionRepository = transactionRepository;
         this.transactionMapper = transactionMapper;
         this.accountRepository= accountRepository;
+        this.accountService = accountService;
     }
 
     public List<TransactionDTO> getAllTransactions(){
@@ -59,8 +62,12 @@ public class TransactionService {
     public TransactionDTO makeTransaction(TransactionDTO transactionDTO){
         try{
            Account account = checkIfAccountExists(transactionDTO);
-           Map<String, Object> processResult = processtTransaction(transactionDTO, account);
-            return null;
+           Map<String, Object> processResult = processTransaction(transactionDTO, account);
+           Boolean status = (Boolean) processResult.get(Response.KEY_STATUS_TRANSACTION);
+           if(status){
+               TransactionDTO dtoResult = (TransactionDTO) processResult.get(Response.KEY_DTO);
+               return dtoResult;
+           }else throw new CustomException(Response.NO_TRANSACTION_MADE);
         }catch (Exception e){
             throw new CustomException(e.getMessage(), e.getCause());
         }
@@ -72,16 +79,31 @@ public class TransactionService {
         return account.get();
     }
 
-    protected Map<String, Object> processtTransaction(TransactionDTO transactionDTO, Account account) throws ParseException {
+    protected Map<String, Object> processTransaction(TransactionDTO transactionDTO, Account account) throws ParseException {
         Map<String, Object> transactionResult = new HashMap<>();
         StringBuilder processMessage = new StringBuilder();
         BigDecimal saldoTransaccion = transactionDTO.getSaldoInicial().subtract(transactionDTO.getValor());
         Map<String, Object> resultCheck = checkTransactionWriteErrorMessage(transactionDTO);
+        Boolean processStatus;
         try{
                processMessage.append(checkTransactionWriteErrorMessage(transactionDTO));
-
+               processStatus = (Boolean) resultCheck.get(Response.KEY_STATUS_TRANSACTION);
+               saldoTransaccion = (BigDecimal) resultCheck.get(Response.KEY_DIFFERENCE_TRANSACTION);
+               if(!processStatus){
+                   transactionResult.put(Response.KEY_STATUS_TRANSACTION, false);
+               }else{
+                   if(processStatus && transactionDTO.getTipoMovimiento().equals(TransactionTypeEnum.DEBIT)){
+                       transactionResult.put(Response.KEY_DTO, this.processTransactionOfGivenType(transactionDTO, account, TransactionTypeEnum.DEBIT));
+                       transactionResult.put(Response.KEY_STATUS_TRANSACTION, true);
+                   }
+                   if(processStatus && transactionDTO.getTipoMovimiento().equals(TransactionTypeEnum.DEPOSIT)){
+                       transactionResult.put(Response.KEY_DTO, this.processTransactionOfGivenType(transactionDTO, account, TransactionTypeEnum.DEPOSIT));
+                       transactionResult.put(Response.KEY_STATUS_TRANSACTION, true);
+                   }
+               }
             return transactionResult;
         }catch (Exception e){
+            log.error("Error at process transaction of TransactionService");
             throw e;
         }
     }
@@ -120,23 +142,34 @@ public class TransactionService {
         return checkResult;
     }
 
-    protected TransactionDTO processDebit(TransactionDTO transactionDTO, Account account){
+
+    protected TransactionDTO processTransactionOfGivenType(TransactionDTO transactionDTO, Account account, TransactionTypeEnum transactionTypeEnum) throws ParseException {
         try{
-            BigDecimal newDifference = account.getInitialBalance().subtract(transactionDTO.getValor());
-            if(newDifference.compareTo(BigDecimal.ZERO) <0) throw new CustomException(Response.NO_FUNDS_AVAILABLE);
+            BigDecimal newDifference = new BigDecimal("0.0");
+            if(transactionTypeEnum.equals(TransactionTypeEnum.DEBIT)){
+                newDifference = account.getInitialBalance().subtract(transactionDTO.getValor());
+                if(newDifference.compareTo(BigDecimal.ZERO) <0) throw new CustomException(Response.NO_FUNDS_AVAILABLE);
+            }
+            if(transactionTypeEnum.equals(TransactionTypeEnum.DEPOSIT)){
+                newDifference = account.getInitialBalance().add(transactionDTO.getValor());
+            }
+
             Transaction  transaction = Transaction.builder()
                     .initialBalance(account.getInitialBalance())
                     .balanceAvailable(newDifference)
-                    .ammount(transactionDTO.getValor()) //maybe add after getValor .multiplue(BigDecimal.valueOf(-1)
+                    .ammount(transactionDTO.getValor())
                     .transactionDate(Util.getTodaysDate())
                     .transactionType(transactionDTO.getTipoMovimiento())
                     .account(account)
                     .status(true)
                     .build();
+
             transactionRepository.save(transaction);
+            log.info("Updating balanace...");
+            accountService.setCurrentAvailableBalanceToAccount(account, newDifference);
             return transactionMapper.transactionToTransactionDto(transaction);
         }catch (Exception e){
-            log.error("Error processing debit transaction ", e);
+            log.error("Error processing deposit transaction ", e);
             throw new CustomException(e.getMessage(), e.getCause());
         }
 

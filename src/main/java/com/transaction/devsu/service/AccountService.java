@@ -123,6 +123,7 @@ public class AccountService {
 
     public void setCurrentAvailableBalanceToAccount(Account account, BigDecimal availableBalance){
         account.setInitialBalance(availableBalance);
+        log.info("setting new balanace to account");
         accountRepository.save(account);
     }
 
