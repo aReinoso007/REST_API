@@ -34,7 +34,7 @@ public class TransactionService {
     public List<TransactionDTO> getAllTransactions(){
         try{
             Optional<List<Transaction>> transactions = Optional.of(transactionRepository.findAll());
-            return transactionMapper.toTransactionDtoList(transactions.orElseGet(ArrayList::new));
+            return transactionMapper.transactionListToTransactionDtoList(transactions.orElseGet(ArrayList::new));
         }catch (Exception e){
             log.error("Error getting transaction list at service "+e);
             throw new CustomException(e.getMessage(), e.getCause());

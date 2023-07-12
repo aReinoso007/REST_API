@@ -35,7 +35,7 @@ public class ClientService {
     public List<ClientDTO> getAllClients(){
         try{
             Optional<List<Client>> clients = Optional.of(clienteRepository.findAll());
-            return clientMapper.toClientDTOs(clients.orElseGet(ArrayList::new));
+            return clientMapper.clientListToClientDTOList(clients.orElseGet(ArrayList::new));
         }catch (Exception e){
             log.error("Exception at ClientService while getting all");
             throw new CustomException(e.getMessage(), e);
@@ -45,7 +45,7 @@ public class ClientService {
     public ClientDTO findByClientId(Long id){
         try{
             Optional<Client> client = clienteRepository.findById(id);
-            return clientMapper.toClientDTO(client.orElseThrow(()-> new CustomException(Response.CLIENT_NOT_FOUND)));
+            return clientMapper.clientToClientDTO(client.orElseThrow(()-> new CustomException(Response.CLIENT_NOT_FOUND)));
         }catch (Exception e){
             log.error("Error at ClientService.findByClientId");
             throw new CustomException(e.getMessage(), e);
@@ -59,7 +59,7 @@ public class ClientService {
             if(clienteOptional.isPresent()){
                 throw new CustomException(Response.CLIENT_EXISTS);
             }
-            return clientMapper.toClientDTO(clienteRepository.save(clientMapper.toClient(clientDTO)));
+            return clientMapper.clientToClientDTO(clienteRepository.save(clientMapper.clientDTOToClient(clientDTO)));
         } catch (ConstraintViolationException cve){
             throw new CustomException(cve.getConstraintViolations().toString());
         }catch (Exception e){
@@ -74,10 +74,10 @@ public class ClientService {
         try {
             Client client = clienteRepository.findByIdentification(identificacion)
                     .orElseThrow(()-> new CustomException(Response.CLIENT_NOT_FOUND));
-            Client clientDataToUpdate = clientMapper.toClient(clientDTO);
+            Client clientDataToUpdate = clientMapper.clientDTOToClient(clientDTO);
             BeanUtilsBean beanUtilsBean = new BeanNullPropChecker();
             beanUtilsBean.copyProperties(client, clientDataToUpdate);
-            return clientMapper.toClientDTO(clienteRepository.save(client));
+            return clientMapper.clientToClientDTO(clienteRepository.save(client));
         }catch (Exception e){
             log.error("error at updateClientData of ClientService "+e.getMessage());
             throw new CustomException(e.getMessage(), e.getCause());
@@ -94,7 +94,7 @@ public class ClientService {
             toSave.setName(nombre);
             Client clientSaved = clienteRepository.save(toSave);
 
-            return clientMapper.toClientDTO(clientSaved);
+            return clientMapper.clientToClientDTO(clientSaved);
 
         }catch (Exception e){
             log.error("error updating name "+e.getMessage());

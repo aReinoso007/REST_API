@@ -18,11 +18,11 @@ public interface ClientMapper {
     @Mapping(source = "phoneNumber", target = "numeroTelefono")
     @Mapping(source = "password", target = "contrasena")
     @Mapping(source = "status", target = "estado")
-    ClientDTO toClientDTO(Client client);
-    List<ClientDTO> toClientDTOs(List<Client> clients);
+    ClientDTO clientToClientDTO(Client client);
+    List<ClientDTO> clientListToClientDTOList(List<Client> clients);
 
     @InheritInverseConfiguration
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "accounts", ignore = true)
-    Client toClient(ClientDTO clientDTO);
+    Client clientDTOToClient(ClientDTO clientDTO);
 }

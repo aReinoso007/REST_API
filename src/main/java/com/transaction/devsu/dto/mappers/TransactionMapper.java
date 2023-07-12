@@ -14,10 +14,10 @@ public interface TransactionMapper {
     @Mapping(source = "transactionDate", target = "fechaMovimiento")
     @Mapping(source = "transactionType", target = "tipoMovimiento")
     @Mapping(source = "ammount", target = "valor")
-    @Mapping(source = "balance", target = "saldo")
+    @Mapping(source = "balance", target = "saldoInicial")
     @Mapping(source = "account.client.identification", target = "clienteCedula")
-    TransactionDTO toTransactionDto(Transaction transaction);
-    List<TransactionDTO> toTransactionDtoList(List<Transaction> transactions);
+    TransactionDTO transactionToTransactionDto(Transaction transaction);
+    List<TransactionDTO> transactionListToTransactionDtoList(List<Transaction> transactions);
 
     @InheritInverseConfiguration
     @Mapping(target = "id", ignore = true)

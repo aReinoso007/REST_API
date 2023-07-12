@@ -40,7 +40,7 @@ public class AccountService {
     public List<AccountDTO> getAllAccount(){
         try{
             Optional<List<Account>> accounts = Optional.of(accountRepository.findAll());
-            return accountMapper.toAccountDTOs(accounts.orElseGet(ArrayList::new));
+            return accountMapper.accountListToAccountDTOList(accounts.orElseGet(ArrayList::new));
         }catch (Exception e){
             throw new CustomException(e.getMessage(), e.getCause());
         }
@@ -50,9 +50,9 @@ public class AccountService {
         try{
             Optional<Client> client = clienteRepository.findByIdentification(accountDTO.getClienteCedula());
             if(!client.isPresent()) throw new CustomException(Response.CLIENT_NOT_FOUND);
-            Account account = accountMapper.toAccount(accountDTO);
+            Account account = accountMapper.accountDTOToAccount(accountDTO);
             account.setClient(client.get());
-            return accountMapper.toAccountDTO(accountRepository.save(account));
+            return accountMapper.accontToAccountDTO(accountRepository.save(account));
         }catch (Exception e){
             throw new CustomException(e.getMessage(), e.getCause());
         }
@@ -66,8 +66,8 @@ public class AccountService {
             Client client = clienteRepository.findByIdentification(account.getClient().getIdentification())
                     .orElseThrow(()-> new CustomException(Response.CLIENT_NOT_FOUND));
             BeanUtilsBean beanUtilsBean = new BeanNullPropChecker();
-            beanUtilsBean.copyProperties(account, accountMapper.toAccount(accountDTO));
-            return accountMapper.toAccountDTO(accountRepository.save(account));
+            beanUtilsBean.copyProperties(account, accountMapper.accountDTOToAccount(accountDTO));
+            return accountMapper.accontToAccountDTO(accountRepository.save(account));
 
         }catch (Exception e){
             log.error("Error updating account at AccountService ", e.getMessage());
@@ -79,7 +79,7 @@ public class AccountService {
         try{
             Account account = accountRepository.findAccountByAccountNumber(accountNumber);
             if(account == null) throw new CustomException(Response.RESOURCE_NOT_FOUND);
-            return accountMapper.toAccountDTO(account);
+            return accountMapper.accontToAccountDTO(account);
         }catch (Exception e){
             throw new CustomException(e.getMessage(), e.getCause());
         }
@@ -89,7 +89,7 @@ public class AccountService {
         try{
             Optional<Account> account = accountRepository.findById(id);
             if(account.isEmpty()) throw new CustomException(Response.RESOURCE_NOT_FOUND);
-            return accountMapper.toAccountDTO(account.get());
+            return accountMapper.accontToAccountDTO(account.get());
         }catch (Exception e){
             throw new CustomException(e.getMessage(), e.getCause());
         }

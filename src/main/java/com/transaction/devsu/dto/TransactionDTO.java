@@ -26,7 +26,7 @@ public class TransactionDTO {
     @NotNull(message = "Valor is required")
     private BigDecimal valor;
     @NotNull(message = "Saldo is required")
-    private BigDecimal saldo;
+    private BigDecimal saldoInicial;
     @NotNull(message = "Cliente cedula is required")
     private String clienteCedula;
 

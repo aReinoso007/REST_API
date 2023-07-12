@@ -16,13 +16,13 @@ public interface AccountMapper {
     @Mapping(source = "status", target = "estado")
 
     @Mapping(source = "client.identification", target = "clienteCedula")
-    AccountDTO toAccountDTO(Account account);
+    AccountDTO accontToAccountDTO(Account account);
 
-    List<AccountDTO> toAccountDTOs(List<Account> accounts);
+    List<AccountDTO> accountListToAccountDTOList(List<Account> accounts);
 
     @InheritInverseConfiguration
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "client", ignore = true)
     @Mapping(target = "transactions", ignore = true)
-    Account toAccount(AccountDTO accountDTO);
+    Account accountDTOToAccount(AccountDTO accountDTO);
 }
