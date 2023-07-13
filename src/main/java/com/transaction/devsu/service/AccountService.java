@@ -63,9 +63,9 @@ public class AccountService {
         }
     }
 
-    public AccountDTO updateAccount(AccountDTO accountDTO, String accountNumber){
+    public AccountDTO updateAccount(AccountDTO accountDTO){
         try{
-            Account account = accountRepository.findByAccountNumber(accountNumber).orElseThrow(()->
+            Account account = accountRepository.findByAccountNumber(accountDTO.getNumeroCuenta()).orElseThrow(()->
                     new CustomException(Response.RESOURCE_NOT_FOUND));
 
             Client client = clienteRepository.findByIdentification(account.getClient().getIdentification())

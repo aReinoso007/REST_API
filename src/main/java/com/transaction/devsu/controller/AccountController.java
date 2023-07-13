@@ -60,9 +60,9 @@ public class AccountController {
     }
 
     @PutMapping()
-    public ResponseEntity<?> updateAccount(@RequestBody AccountDTO accountDTO, @RequestParam String accountNumber){
+    public ResponseEntity<?> updateAccount(@RequestBody AccountDTO accountDTO){
         try{
-            return new ResponseEntity<>(accountService.updateAccount(accountDTO, accountNumber), Response.HTTP_STATUS_CREATED);
+            return new ResponseEntity<>(accountService.updateAccount(accountDTO), Response.HTTP_STATUS_OK);
         }catch (Exception e){
             String message = Util.getConstraintViolationsFromException(e);
             return ResponseHandler.generateResponse(message, Response.HTTP_STATUS_BAD_REQUEST, null);

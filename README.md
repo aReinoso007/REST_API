@@ -18,20 +18,20 @@ Los endpoints son:
 
 ## Consumo EndPoint ``` /clientes ```
 
-### Add new client
+#### Add new client
 
   ``` javascript
   URL: http://localhost:8080/clientes,
   METHOD: POST,
-  PAYLOAD:JSON = {
-      "cedula":"1400919406",
-      "nombre":"DEV SU TEST TRES",
-      "genero":"FEMALE",
-      "edad":25,
-      "direccion":"Ecuador",
-      "numeroTelefono":"0998952718",
-      "contrasena":"Abc123!df",
-      "estado":true
+  BODY:JSON = {
+      "cedula": "1400919407",
+      "nombre": "DEV SU README",
+      "genero": "FEMALE",
+      "edad": 25,
+      "direccion": "Ecuador",
+      "numeroTelefono": "0998952718",
+      "contrasena": "Abc123!df",
+      "estado": true
     }
   EXPECTED_OK_RESPONSE: 201 CREATED, 
     {
@@ -45,15 +45,17 @@ Los endpoints son:
       "estado": true
     }
 ```
-### Delete Client by Cedula
+#### Delete Client by Cedula
 ```javascript
   URL: http://localhost:8080/clientes/1400919407
+  METHOD: DELETE
   PATH_VARIABLE: 1400919407
   EXPECTED_OK_RESPONSE: TRANSACTION COMPLETED SUCCESSFULLY
 ```
-### Update method: update Client Name
+#### Update method: update Client Name
 ``` javascript
   URL: http://localhost:8080/clientes/1400919407?nombre=Dev Su README UPDATED
+  METHOD: PATCH
   PATH_VARIABLE: STRING cedula, 
   REQUEST_PARAM: STRING nombre
   EXPECTED_OK_RESPONSE: 200 OK,
@@ -72,4 +74,61 @@ Los endpoints son:
     "status": "OK"
 }
 
+```
+## Consumo EndPoint ``` /cuentas ```
+
+#### Add new cuenta
+```javascript
+  URL: http://localhost:8080/cuentas
+  METHOD: Post
+  BODY:JSON = {
+    "numeroCuenta":"478754",
+    "tipoCuenta":"AHORROS",
+    "saldoInicial":60,
+    "estado":true,
+    "clienteCedula":"1400919407"
+}
+  EXPECTED_OK_RESPONSE: 201 CREATED,
+    {
+      "numeroCuenta": "478754",
+      "tipoCuenta": "AHORROS",
+      "saldoInicial": 60,
+      "estado": true,
+      "clienteCedula": "1400919405"
+    }
+
+```
+#### GET CUENTA BY ACCOUNT NUMBER
+```javascript
+  URL: http://localhost:8080/cuentas/cuenta/478754
+  METHOD: GET
+  PATH_VARIABLE: String numeroCuenta
+```
+#### DELETE CUENTA BY ACCOUNT NUMBER
+```javascript
+  URL: http://localhost:8080/cuentas/numeroCuenta/478752
+  METHOD: DELETE
+  PATH_VARIABLE: STRING numeroCuenta, 
+```
+
+### UPDATE CUENTA
+```javascript
+  URL: http://localhost:8080/cuentas/numeroCuenta/478754
+  METHOD: PUT
+  BODY:
+  {
+    "numeroCuenta":"478754",
+    "tipoCuenta":"CORRIENTE",
+    "saldoInicial":60,
+    "estado":true,
+    "clienteCedula":"1400919405"
+  }
+  EXPECTED_OK_RESPONSE: 200 OK,
+  {
+    "numeroCuenta": "478754",
+    "tipoCuenta": "CORRIENTE",
+    "saldoInicial": 60,
+    "estado": true,
+    "clienteCedula": "1400919405"
+}
 ```
