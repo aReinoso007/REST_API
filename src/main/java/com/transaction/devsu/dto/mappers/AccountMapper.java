@@ -14,7 +14,6 @@ public interface AccountMapper {
     @Mapping(source = "accountType", target = "tipoCuenta")
     @Mapping(source = "initialBalance", target = "saldoInicial")
     @Mapping(source = "status", target = "estado")
-
     @Mapping(source = "client.identification", target = "clienteCedula")
     AccountDTO accontToAccountDTO(Account account);
 

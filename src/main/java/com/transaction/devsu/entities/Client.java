@@ -1,10 +1,8 @@
 package com.transaction.devsu.entities;
 
-import com.transaction.devsu.entities.enums.GenderEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
