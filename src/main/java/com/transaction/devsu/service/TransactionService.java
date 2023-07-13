@@ -107,29 +107,29 @@ public class TransactionService {
     }
 
     protected Map<String, Object> checkTransactionWriteErrorMessage(TransactionDTO transactionDTO) throws ParseException {
-        StringBuilder processMessage = new StringBuilder();
+        String processMessage = "";
         Map<String, Object> checkResult = new HashMap<>();
         Boolean transactionStatus = true;
         BigDecimal saldoTransaccion = transactionDTO.getSaldoInicial().subtract(transactionDTO.getValor());
 
         if(transactionDTO.getValor().compareTo(BigDecimal.ZERO) <=0 && transactionDTO.getTipoMovimiento().equals(TransactionTypeEnum.DEPOSIT)){
-            processMessage.append(Response.INVALID_TRANSACTION_DEPOSIT);
+            processMessage = Response.INVALID_TRANSACTION_DEPOSIT;
             transactionStatus = false;
         }
 
         if(saldoTransaccion.compareTo(BigDecimal.ZERO) <= 0 && transactionDTO.getTipoMovimiento().equals(TransactionTypeEnum.DEBIT)){
-            processMessage.append(Response.NO_FUNDS_AVAILABLE);
+            processMessage = Response.NO_FUNDS_AVAILABLE;
             transactionStatus = false;
         }
         /*True means it has exceeded, false it hasnt */
         if(checkDailyLimit(transactionDTO)) {
-            processMessage.append(Response.DAILY_LIMIT_EXCEEDED);
+            processMessage = Response.DAILY_LIMIT_EXCEEDED;
             transactionStatus = false;
         }
+        if(transactionStatus) processMessage = Response.SUCCESS;
         log.info("message in check method "+processMessage.toString());
         log.info("status process "+transactionStatus);
 
-        processMessage.append(transactionStatus ? processMessage.append(Response.TRANSACTION_OK).toString() : processMessage.toString()) ;
         checkResult.put(Response.KEY_MESSAGE_TRANSACTION, processMessage);
         checkResult.put(Response.KEY_STATUS_TRANSACTION, transactionStatus);
         return checkResult;
@@ -143,6 +143,7 @@ public class TransactionService {
             if(transactionTypeEnum.equals(TransactionTypeEnum.DEBIT)){
                 log.info("debiting");
                 newDifference = account.getInitialBalance().subtract(transactionDTO.getValor());
+                if(newDifference.compareTo(BigDecimal.ZERO) <0) throw new CustomException(Response.NO_FUNDS_AVAILABLE);
                 log.info("new diff "+newDifference);
                 transaction = Transaction.builder()
                         .initialBalance(account.getInitialBalance())
@@ -153,7 +154,7 @@ public class TransactionService {
                         .account(account)
                         .status(true)
                         .build();
-                if(newDifference.compareTo(BigDecimal.ZERO) <0) throw new CustomException(Response.NO_FUNDS_AVAILABLE);
+
             }
             if(transactionTypeEnum.equals(TransactionTypeEnum.DEPOSIT)){
                 newDifference = account.getInitialBalance().add(transactionDTO.getValor());

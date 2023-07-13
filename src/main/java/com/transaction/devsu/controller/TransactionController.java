@@ -40,7 +40,8 @@ public class TransactionController {
             return new ResponseEntity<>(transactionService.makeTransaction(transactionDTO), Response.HTTP_STATUS_OK);
         }catch (Exception e){
             String message = Util.getConstraintViolationsFromException(e);
-            return ResponseHandler.generateResponse(message, Response.HTTP_STATUS_BAD_REQUEST, null);
+            log.info("message in exception constraint "+message);
+            return ResponseHandler.generateResponse(message, Response.HTTP_STATUS_BAD_REQUEST, transactionDTO);
         }
     }
 
