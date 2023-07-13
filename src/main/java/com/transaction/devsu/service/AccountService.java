@@ -54,7 +54,7 @@ public class AccountService {
     public AccountDTO addAccount(AccountDTO accountDTO){
         try{
             Optional<Client> client = clienteRepository.findByIdentification(accountDTO.getClienteCedula());
-            if(!client.isPresent()) throw new CustomException(Response.CLIENT_NOT_FOUND);
+            if(client.isPresent()) throw new CustomException(Response.CLIENT_EXISTS);
             Account account = accountMapper.accountDTOToAccount(accountDTO);
             account.setClient(client.get());
             return accountMapper.accontToAccountDTO(accountRepository.save(account));
