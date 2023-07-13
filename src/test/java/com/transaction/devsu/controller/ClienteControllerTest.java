@@ -1,13 +1,11 @@
 package com.transaction.devsu.controller;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -21,10 +19,6 @@ class ClienteControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @BeforeEach
-    void setUp() {
-    }
 
     @Test
     void getClientes() throws Exception {
@@ -40,8 +34,8 @@ class ClienteControllerTest {
     void save() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/clientes")
         .content("{\n" +
-                "    \"cedula\":\"1400919406\",\n" +
-                "    \"nombre\":\"DEV SU TEST TRES\",\n" +
+                "    \"cedula\":\"1400919408\",\n" +
+                "    \"nombre\":\"DEV SU TEST\",\n" +
                 "    \"genero\":\"FEMALE\",\n" +
                 "    \"edad\":25,\n" +
                 "    \"direccion\":\"Ecuador\",\n" +
@@ -54,5 +48,5 @@ class ClienteControllerTest {
                         .content()
                         .contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
-    
+
 }
