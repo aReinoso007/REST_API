@@ -132,3 +132,74 @@ Los endpoints son:
     "clienteCedula": "1400919405"
 }
 ```
+
+## Consumo EndPoint ``` /movimientos ```
+#### HACER MOVIMIENTO DEPOSITO
+```javascript
+  URL: http:localhost:8080/movimientos
+  METHOD: POST
+  BODY:
+  {
+    "numeroCuenta": "478754",
+    "fechaMovimiento": "12-07-2023",
+    "tipoMovimiento": "DEPOSIT",
+    "valor": 5,
+    "saldoInicial": 60.00,
+    "saldoDisponible": 60.00,
+    "clienteCedula": "1400919405",
+    "estado": true
+  }
+  EXPECTED_OK_RESPONSE: 200 OK,
+  {
+    "numeroCuenta": "478754",
+    "fechaMovimiento": "12-07-2023",
+    "tipoMovimiento": "DEPOSIT",
+    "valor": 5,
+    "saldoInicial": 60.00,
+    "saldoDisponible": 65.00,
+    "clienteCedula": "1400919405",
+    "estado": true
+  }
+```
+#### HACER MOVIMIENTO DEBITO
+```javascript
+  URL: http:localhost:8080/movimientos
+  METHOD: POST
+  BODY:
+  {
+    "numeroCuenta": "478753",
+    "fechaMovimiento": "12-07-2023",
+    "tipoMovimiento": "DEBIT",
+    "valor": 20,
+    "saldoInicial": 55.00,
+    "saldoDisponible": 55.00,
+    "clienteCedula": "1400919404",
+    "estado": true
+}
+  EXPECTED_OK_RESPONSE: 200 OK,
+  {
+    "numeroCuenta": "478753",
+    "fechaMovimiento": "13-07-2023",
+    "tipoMovimiento": "DEBIT",
+    "valor": -20,
+    "saldoInicial": 55.00,
+    "saldoDisponible": 35.00,
+    "clienteCedula": "1400919404",
+    "estado": true
+}
+```
+#### OBTENER TODAS LAS TRANSACCIONES POR NUMERO DE CUENTA
+```javascript
+  URL: http:localhost:8080/movimientos/cuenta/{accountNumber}
+  PATH_VARIABLE: String accountNumber
+  METHOD: GET
+```
+
+## Consumo endpoint ```/reportes```
+#### OBTENER REPORTE ESTADO DE CUENTA
+```javascript
+  URL: http://localhost:8080/reportes?identification={identification}&initDate={initDate}&endDate={endDate}
+  METHOD: GET
+  PARAMS: String identification, String initDate, String endDate
+  OBSERVATION: initDate y endDate patron: dd-MM-yyyy. Ej: 12-07-2023 
+```
