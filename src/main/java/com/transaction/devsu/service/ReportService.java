@@ -28,9 +28,11 @@ public class ReportService {
         this.transactionReportMapper = transactionReportMapper;
     }
 
-    public List<TransactionReportDTO> geTransactionReportByIdentificationAndDateRange(String identification, Date initDate, Date endDate){
+    public List<TransactionReportDTO> geTransactionReportByIdentificationAndDateRange(String identification, String initDate, String endDate){
         try{
-            Optional<List<Transaction>> transactions = transactionRepository.findByAccountClientIdentificationAndTransactionDateBetween(identification, initDate, endDate);
+            Optional<List<Transaction>> transactions = transactionRepository.
+                    findByAccountClientIdentificationAndTransactionDateBetween(
+                            identification, Util.formatDateInputs(initDate), Util.formatDateInputs(endDate));
             return transactionReportMapper.toReportDTOList(transactions.orElseGet(ArrayList::new));
         }catch (Exception e){
             log.error("error getting report {}",e);

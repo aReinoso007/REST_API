@@ -24,8 +24,8 @@ public class ReportController {
 
     @GetMapping("")
     public List<TransactionReportDTO> getReportByAccountNumberAndDateRange(@RequestParam String identification,
-                                                                           @RequestParam Date initDate,
-                                                                           @RequestParam Date endDate){
+                                                                           @RequestParam String initDate,
+                                                                           @RequestParam String endDate){
         return reportService.geTransactionReportByIdentificationAndDateRange(identification, initDate, endDate);
 
     }
