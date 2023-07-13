@@ -1,0 +1,91 @@
+-- Database: devsu
+
+-- DROP DATABASE devsu;
+
+CREATE DATABASE devsu
+    WITH 
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'English_United States.1252'
+    LC_CTYPE = 'English_United States.1252'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+
+-- Table: public.dev_accounts
+
+-- DROP TABLE public.dev_accounts;
+
+CREATE TABLE IF NOT EXISTS public.dev_accounts
+(
+    acc_initial_balance numeric(38,2) NOT NULL,
+    acc_status boolean NOT NULL,
+    acc_id bigint NOT NULL,
+    act_cli_id bigint,
+    acc_account_number character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    acc_account_type character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT dev_accounts_pkey PRIMARY KEY (acc_id),
+    CONSTRAINT dev_accounts_acc_account_number_key UNIQUE (acc_account_number),
+    CONSTRAINT fk57y5pi4jc1ig4l8x1a49bf4fw FOREIGN KEY (act_cli_id)
+        REFERENCES public.dev_clients (per_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT dev_accounts_acc_account_type_check CHECK (acc_account_type::text = ANY (ARRAY['CORRIENTE'::character varying, 'AHORROS'::character varying]::text[]))
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.dev_accounts
+    OWNER to alex;
+
+-- Table: public.dev_clients
+
+-- DROP TABLE public.dev_clients;
+
+CREATE TABLE IF NOT EXISTS public.dev_clients
+(
+    cli_status boolean,
+    per_age integer NOT NULL,
+    per_id bigint NOT NULL,
+    per_identification character varying(10) COLLATE pg_catalog."default" NOT NULL,
+    cli_password character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    per_address character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    per_gender character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    per_name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    per_phone_number character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT dev_clients_pkey PRIMARY KEY (per_id),
+    CONSTRAINT dev_clients_per_age_check CHECK (per_age <= 100 AND per_age >= 18),
+    CONSTRAINT dev_clients_per_gender_check CHECK (per_gender::text = ANY (ARRAY['MALE'::character varying, 'FEMALE'::character varying]::text[]))
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.dev_clients
+    OWNER to alex;
+
+
+-- Table: public.dev_transactions
+
+-- DROP TABLE public.dev_transactions;
+
+CREATE TABLE IF NOT EXISTS public.dev_transactions
+(
+    tra_ammount numeric(38,2),
+    tra_balance_available numeric(38,2),
+    tra_initial_balance numeric(38,2),
+    tra_status boolean,
+    tra_acc_id bigint,
+    tra_date timestamp(6) without time zone,
+    tra_id bigint NOT NULL,
+    tra_transaction_type character varying(255) COLLATE pg_catalog."default",
+    CONSTRAINT dev_transactions_pkey PRIMARY KEY (tra_id),
+    CONSTRAINT fkqf0s44g9i475axyvm5d2rokd0 FOREIGN KEY (tra_acc_id)
+        REFERENCES public.dev_accounts (acc_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT dev_transactions_tra_transaction_type_check CHECK (tra_transaction_type::text = ANY (ARRAY['DEPOSIT'::character varying, 'DEBIT'::character varying]::text[]))
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.dev_transactions
+    OWNER to alex;
