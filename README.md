@@ -18,7 +18,7 @@ Los endpoints son:
 
 ## Consumo EndPoint ``` /clientes ```
 
-#### Add new client
+#### AGREGAR CLIENTE
 
   ``` javascript
   URL: http://localhost:8080/clientes,
@@ -45,16 +45,16 @@ Los endpoints son:
       "estado": true
     }
 ```
-#### Delete Client by Cedula
+#### ELIMINAR CLIENTE POR CEDULA
 ```javascript
-  URL: http://localhost:8080/clientes/1400919407
+  URL: http://localhost:8080/clientes/{cedula}
   METHOD: DELETE
-  PATH_VARIABLE: 1400919407
+  PATH_VARIABLE: String cedula
   EXPECTED_OK_RESPONSE: TRANSACTION COMPLETED SUCCESSFULLY
 ```
-#### Update method: update Client Name
+#### ACTUALIZAR NOMBRE USUARIO
 ``` javascript
-  URL: http://localhost:8080/clientes/1400919407?nombre=Dev Su README UPDATED
+  URL: http://localhost:8080/clientes/{cedula}?nombre={nombre}
   METHOD: PATCH
   PATH_VARIABLE: STRING cedula, 
   REQUEST_PARAM: STRING nombre
@@ -77,7 +77,7 @@ Los endpoints son:
 ```
 ## Consumo EndPoint ``` /cuentas ```
 
-#### Add new cuenta
+#### AGREGAR NUEVA CUENTA
 ```javascript
   URL: http://localhost:8080/cuentas
   METHOD: Post
@@ -98,23 +98,24 @@ Los endpoints son:
     }
 
 ```
-#### GET CUENTA BY ACCOUNT NUMBER
+#### OBTENER CUENTA POR NUMERO DE CUENTA
 ```javascript
-  URL: http://localhost:8080/cuentas/cuenta/478754
+  URL: http://localhost:8080/cuentas/cuenta/{numeroCuenta}
   METHOD: GET
   PATH_VARIABLE: String numeroCuenta
 ```
-#### DELETE CUENTA BY ACCOUNT NUMBER
+#### ELIMINAR CUENTA POR NUMERO DE CUENTA
 ```javascript
-  URL: http://localhost:8080/cuentas/numeroCuenta/478752
+  URL: http://localhost:8080/cuentas/numeroCuenta/{numeroCuenta}
   METHOD: DELETE
   PATH_VARIABLE: STRING numeroCuenta, 
 ```
 
-### UPDATE CUENTA
+#### ACTUALIZAR CUENTA
 ```javascript
-  URL: http://localhost:8080/cuentas/numeroCuenta/478754
+  URL: http://localhost:8080/cuentas/numeroCuenta/{numeroCuenta}
   METHOD: PUT
+  PATH_VARIABLE: STRING numeroCuenta, 
   BODY:
   {
     "numeroCuenta":"478754",
