@@ -64,20 +64,26 @@ public class TransactionService {
            Account account = checkIfAccountExists(transactionDTO);
            Map<String, Object> processResult = processTransaction(transactionDTO, account);
            Boolean status = (Boolean) processResult.get(Response.KEY_STATUS_TRANSACTION);
-           log.info("message from check "+ processResult.get(Response.KEY_MESSAGE_TRANSACTION).toString());
+           log.info("status in makeTransaction "+status);
            if(status){
                TransactionDTO dtoResult = (TransactionDTO) processResult.get(Response.KEY_DTO);
                return dtoResult;
            }else throw new CustomException((String) processResult.get(Response.KEY_MESSAGE_TRANSACTION));
         }catch (Exception e){
+            log.error("error at makeTransaction "+e.getMessage());
             throw new CustomException(e.getMessage(), e.getCause());
         }
     }
 
     protected Account checkIfAccountExists(TransactionDTO transactionDTO){
-        Optional<Account> account = accountRepository.findByAccountNumber(transactionDTO.getNumeroCuenta());
-        if(account.isEmpty()) throw new CustomException(Response.RESOURCE_NOT_FOUND);
-        return account.get();
+       try{
+           Optional<Account> account = accountRepository.findByAccountNumber(transactionDTO.getNumeroCuenta());
+           if(account.isEmpty()) throw new CustomException(Response.RESOURCE_NOT_FOUND);
+           return account.get();
+       }catch (Exception e){
+           log.error("Checking if account exists "+e.getMessage());
+           throw e;
+       }
     }
 
     protected Map<String, Object> processTransaction(TransactionDTO transactionDTO, Account account) throws ParseException {
@@ -101,7 +107,7 @@ public class TransactionService {
                }
             return transactionResult;
         }catch (Exception e){
-            log.error("Error at process transaction of TransactionService");
+            log.error("Error at process transaction of TransactionService "+e.getMessage());
             throw e;
         }
     }
@@ -127,8 +133,6 @@ public class TransactionService {
             transactionStatus = false;
         }
         if(transactionStatus) processMessage = Response.SUCCESS;
-        log.info("message in check method "+processMessage.toString());
-        log.info("status process "+transactionStatus);
 
         checkResult.put(Response.KEY_MESSAGE_TRANSACTION, processMessage);
         checkResult.put(Response.KEY_STATUS_TRANSACTION, transactionStatus);
@@ -144,7 +148,7 @@ public class TransactionService {
                 log.info("debiting");
                 newDifference = account.getInitialBalance().subtract(transactionDTO.getValor());
                 if(newDifference.compareTo(BigDecimal.ZERO) <0) throw new CustomException(Response.NO_FUNDS_AVAILABLE);
-                log.info("new diff "+newDifference);
+                log.info("new diff to set in account"+newDifference);
                 transaction = Transaction.builder()
                         .initialBalance(account.getInitialBalance())
                         .balanceAvailable(newDifference)
@@ -171,29 +175,34 @@ public class TransactionService {
 
 
             transactionRepository.save(transaction);
-            log.info("Updating balanace...");
+            log.info("Updating balanace to account " +account.getAccountNumber()+" with newDifference "+newDifference);
             accountService.setCurrentAvailableBalanceToAccount(account, newDifference);
             return transactionMapper.transactionToTransactionDto(transaction);
         }catch (Exception e){
-            log.error("Error processing deposit transaction ", e);
+            log.error("Error processing deposit transaction ", e.getMessage());
             throw new CustomException(e.getMessage(), e.getCause());
         }
 
     }
 
     protected Boolean checkDailyLimit(TransactionDTO transactionDTO) throws ParseException {
-        Boolean dailyLimitstatus = false;
-        Optional<List<Transaction>> transactions = transactionRepository.
-                findTransactionsByAccountAccountNumberAndTransactionTypeAndTransactionDate(transactionDTO.getClienteCedula(),
-                        transactionDTO.getTipoMovimiento(),
-                        Util.getTodaysDate());
-        BigDecimal currentBalance = transactions
-                .orElse(Collections.emptyList())
-                .stream()
-                .map(Transaction::getAmmount)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        if(currentBalance.compareTo(Response.MAX_DAILY_DEBIT) > 0 || transactionDTO.getValor().compareTo(Response.MAX_DAILY_DEBIT) >0) dailyLimitstatus = true;
-        return dailyLimitstatus;
+        try{
+            Boolean dailyLimitstatus = false;
+            Optional<List<Transaction>> transactions = transactionRepository.
+                    findTransactionsByAccountAccountNumberAndTransactionTypeAndTransactionDate(transactionDTO.getClienteCedula(),
+                            transactionDTO.getTipoMovimiento(),
+                            Util.getTodaysDate());
+            BigDecimal currentBalance = transactions
+                    .orElse(Collections.emptyList())
+                    .stream()
+                    .map(Transaction::getAmmount)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+            if(currentBalance.compareTo(Response.MAX_DAILY_DEBIT) > 0 || transactionDTO.getValor().compareTo(Response.MAX_DAILY_DEBIT) >0) dailyLimitstatus = true;
+            return dailyLimitstatus;
+        }catch (Exception e){
+            log.error("error at checking Daily limint "+e.getMessage());
+            throw  e;
+        }
     }
 
 }
