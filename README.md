@@ -33,5 +33,43 @@ Los endpoints son:
       "contrasena":"Abc123!df",
       "estado":true
     }
+  EXPECTED_OK_RESPONSE: 201 CREATED, 
+    {
+      "cedula": "1400919407",
+      "nombre": "DEV SU README",
+      "genero": "FEMALE",
+      "edad": 25,
+      "direccion": "Ecuador",
+      "numeroTelefono": "0998952718",
+      "contrasena": "Abc123!df",
+      "estado": true
+    }
+```
+### Delete Client by Cedula
+```javascript
+  URL: http://localhost:8080/clientes/1400919407
+  PATH_VARIABLE: 1400919407
+  EXPECTED_OK_RESPONSE: TRANSACTION COMPLETED SUCCESSFULLY
+```
+### Update method: update Client Name
+``` javascript
+  URL: http://localhost:8080/clientes/1400919407?nombre=Dev Su README UPDATED
+  PATH_VARIABLE: STRING cedula, 
+  REQUEST_PARAM: STRING nombre
+  EXPECTED_OK_RESPONSE: 200 OK,
+  {
+    "data": {
+        "cedula": "1400919407",
+        "nombre": "Dev Su README UPDATED",
+        "genero": "FEMALE",
+        "edad": 25,
+        "direccion": "Ecuador",
+        "numeroTelefono": "0998952718",
+        "contrasena": "Abc123!df",
+        "estado": true
+    },
+    "message": "TRANSACTION COMPLETED SUCCESSFULLY",
+    "status": "OK"
+}
 
 ```
