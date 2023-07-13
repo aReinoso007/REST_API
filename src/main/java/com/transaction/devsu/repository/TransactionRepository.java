@@ -14,7 +14,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     Optional<List<Transaction>> findTransactionsByAccountAccountNumber(String accountNumber);
     Optional<List<Transaction>> findByAccountClientIdentificationAndTransactionDateBetween(String identification, Date initDate, Date endDate);
-    Optional<List<Transaction>> findTransactionsByAccountClientIdentification(String identification);
     Optional<List<Transaction>> findTransactionsByAccountAccountNumberAndTransactionTypeAndTransactionDate(String accountNumber, TransactionTypeEnum transactionTypeEnum, Date date);
 
 }

@@ -4,7 +4,6 @@ import com.transaction.devsu.entities.enums.GenderEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 @MappedSuperclass
 @Data
