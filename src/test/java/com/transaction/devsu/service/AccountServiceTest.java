@@ -1,16 +1,23 @@
 package com.transaction.devsu.service;
 
 import com.transaction.devsu.dto.ClientDTO;
+import com.transaction.devsu.dto.mappers.AccountMapper;
+import com.transaction.devsu.dto.mappers.AccountMapperImpl;
+import com.transaction.devsu.dto.mappers.ClientMapper;
 import com.transaction.devsu.entities.Client;
 import com.transaction.devsu.repository.AccountRepository;
+import com.transaction.devsu.repository.ClienteRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 
+
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -18,23 +25,21 @@ class AccountServiceTest {
 
     @Mock
     private AccountRepository accountRepository;
+    @Mock
+    private ClienteRepository clienteRepository;
+
     @InjectMocks
     private AccountService accountService;
 
-    private ClientDTO clientDTO;
+    @InjectMocks
+    private AccountMapper accountMapper= new AccountMapperImpl();
+
+
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        clientDTO = ClientDTO.builder()
-                .cedula("1500767403")
-                .nombre("Dev Su Mock Testing")
-                .genero("MALE")
-                .edad(25)
-                .direccion("Direccion Test")
-                .numeroTelefono("0889876728")
-                .contrasena("Abc123!df")
-                .estado(true).build();
+        accountService = new AccountService(accountRepository, clienteRepository);
     }
 
 
@@ -43,4 +48,8 @@ class AccountServiceTest {
         when(accountService.findAll()).thenReturn(Arrays.asList());
         assertNotNull(accountService.findAll());
     }
+
+
+
+
 }

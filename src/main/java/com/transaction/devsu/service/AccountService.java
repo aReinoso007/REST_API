@@ -26,15 +26,16 @@ import java.util.Optional;
 public class AccountService {
 
     private final AccountRepository accountRepository;
-    private final AccountMapper accountMapper;
+    @Autowired
+    private AccountMapper accountMapper;
     private final ClienteRepository clienteRepository;
 
     @Autowired
     public AccountService(AccountRepository accountRepository,
-                           AccountMapper accountMapper,
+                           //AccountMapper accountMapper,
                            ClienteRepository clienteRepository){
         this.accountRepository = accountRepository;
-        this.accountMapper = accountMapper;
+        //this.accountMapper = accountMapper;
         this.clienteRepository = clienteRepository;
     }
 
