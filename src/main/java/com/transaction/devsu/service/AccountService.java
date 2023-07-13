@@ -47,6 +47,10 @@ public class AccountService {
         }
     }
 
+    public List<Account> findAll(){
+        return accountRepository.findAll();
+    }
+
     public AccountDTO addAccount(AccountDTO accountDTO){
         try{
             Optional<Client> client = clienteRepository.findByIdentification(accountDTO.getClienteCedula());

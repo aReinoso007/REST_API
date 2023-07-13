@@ -22,8 +22,9 @@ import java.util.Optional;
 @Slf4j
 @Transactional
 public class ClientService {
-
+    @Autowired
     private final ClienteRepository clienteRepository;
+    @Autowired
     private final ClientMapper clientMapper;
 
     @Autowired

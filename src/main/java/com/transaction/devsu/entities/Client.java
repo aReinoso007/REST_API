@@ -1,9 +1,10 @@
 package com.transaction.devsu.entities;
 
+import com.transaction.devsu.entities.enums.GenderEnum;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
@@ -27,4 +28,7 @@ public class Client extends Person {
 
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Account> accounts;
+
+
+
 }

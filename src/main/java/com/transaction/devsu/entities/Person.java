@@ -3,9 +3,8 @@ package com.transaction.devsu.entities;
 import com.transaction.devsu.entities.enums.GenderEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @MappedSuperclass
 @Data
@@ -54,6 +53,5 @@ public class Person {
     @Column(name = "PER_PHONE_NUMBER")
     @NotNull(message = "Phone Number is required")
     private String phoneNumber;
-
 
 }
