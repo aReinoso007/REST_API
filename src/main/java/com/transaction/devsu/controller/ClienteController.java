@@ -55,12 +55,12 @@ public class ClienteController {
     }
 
 
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<?> deleteClientById(@PathVariable("id") String id){
+    @DeleteMapping(path = "/{cedula}")
+    public ResponseEntity<?> deleteClientById(@PathVariable("cedula") String cedula){
         try{
-            if(clientService.deleteById(Long.valueOf(id))){
+            if(clientService.deleteClientByCedula(cedula)){
                 return new ResponseEntity<>(Response.SUCCESS, HttpStatus.OK);
-            }else return ResponseHandler.generateResponse(Response.CLIENT_NOT_FOUND, Response.HTTP_STATUS_NOT_FOUND, null);
+            }else return ResponseHandler.generateResponse(Response.CLIENT_NOT_FOUND, Response.HTTP_STATUS_NOT_FOUND, cedula);
         }catch (Exception e){
             log.error("delete exception "+e.getCause().getCause().getMessage());
             return ResponseHandler.generateResponse(e.getMessage(), Response.HTTP_STATUS_BAD_REQUEST, null);

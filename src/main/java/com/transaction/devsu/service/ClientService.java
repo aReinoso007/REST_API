@@ -113,4 +113,15 @@ public class ClientService {
         }
     }
 
+    public Boolean deleteClientByCedula(String cedula){
+        try{
+            if(clienteRepository.findByIdentification(cedula).isEmpty()) return false;
+            clienteRepository.deleteClientByIdentification(cedula);
+            return true;
+        }catch (Exception e){
+            log.error("Error at deleting client by cedula {} ", e);
+            throw new CustomException(e.getMessage(), e.getCause());
+        }
+    }
+
 }
