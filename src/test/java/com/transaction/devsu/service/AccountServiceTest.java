@@ -1,10 +1,7 @@
 package com.transaction.devsu.service;
 
-import com.transaction.devsu.dto.ClientDTO;
 import com.transaction.devsu.dto.mappers.AccountMapper;
 import com.transaction.devsu.dto.mappers.AccountMapperImpl;
-import com.transaction.devsu.dto.mappers.ClientMapper;
-import com.transaction.devsu.entities.Client;
 import com.transaction.devsu.repository.AccountRepository;
 import com.transaction.devsu.repository.ClienteRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,12 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 
-
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -39,7 +33,7 @@ class AccountServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        accountService = new AccountService(accountRepository, clienteRepository);
+        accountService = new AccountService(accountRepository, accountMapper, clienteRepository);
     }
 
 
