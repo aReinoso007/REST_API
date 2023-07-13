@@ -29,4 +29,9 @@ public class Util {
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         return formatter.parse(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
     }
+
+    public static Date formatDateInputs(Date date) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        return formatter.parse(new SimpleDateFormat("dd-MM-yyyy").format(date));
+    }
 }
